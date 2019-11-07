@@ -3,13 +3,16 @@ package com.stratego;
 public class Board {
 	
 	private Piece[][] board;   //this array needs to be a 10x10
-	private int w;    //used for width of the display
-	private int h;    //used for height of the display
-	
-	public Board(int width, int height)
+	/*
+	 * private int w; //used for width of the display private int h; //used for
+	 * height of the display
+	 */	
+	public Board()
 	{
-		w = width;
-		h = height;
+		board = new Piece[10][10];
+		/*
+		 * w = width; h = height;
+		 */
 	}
 
 	//used to the piece found at a given grid location

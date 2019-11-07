@@ -11,8 +11,8 @@ public class GameView extends JFrame {
 	JPanel innerPanel;
 	CardLayout cards;
 	
-	GameSetupPanel setupPanel;
-	GamePlayingPanel gamePanel;
+	GameInitPanel setupPanel;
+	GameSetupPanel gamePanel;
 	
 	Game gameModel;
 	
@@ -37,7 +37,7 @@ public class GameView extends JFrame {
 		cards = new CardLayout();
 		innerPanel.setLayout(cards);
 		
-		setupPanel = new GameSetupPanel(new PlayerSetupListener());
+		setupPanel = new GameInitPanel(new PlayerSetupListener());
 		innerPanel.add(setupPanel, "Setup");
 		
 		add(innerPanel);
@@ -50,11 +50,13 @@ public class GameView extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getActionCommand().equals("submit")) {
+			if (e.getActionCommand().equals("start_setup")) {
 				gameModel = new Game(setupPanel.getPlayer1(), setupPanel.getPlayer2());
-				gamePanel = new GamePlayingPanel(gameModel.player1.basePieceImage, gameModel.player2.basePieceImage);
+				gamePanel = new GameSetupPanel(this, gameModel);
 				innerPanel.add(gamePanel, "Game");
 				cards.show(innerPanel, "Game");
+			} else if (e.getActionCommand().equals("start_game")) {
+				new GamePlayPanel(gameModel);
 			}
 		}
 	}

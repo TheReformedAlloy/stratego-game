@@ -22,7 +22,7 @@ public class GamepieceColorChooser extends JPanel{
 	GamepieceColorChooser(String defaultName){
 		super();
 		
-		String currentName = defaultName;
+		currentName = defaultName;
 		
 		setOpaque(false);
 		
@@ -103,7 +103,6 @@ public class GamepieceColorChooser extends JPanel{
 		
 		private class PreviewIcon extends JPanel{
 			
-			Color currentColor;
 			BufferedImage normalPiece;
 			BufferedImage currentPiece;
 			
