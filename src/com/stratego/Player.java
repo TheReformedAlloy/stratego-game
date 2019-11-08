@@ -49,7 +49,7 @@ public class Player {
 		g.drawImage(basePieceImage, 0, 0, null);
 		
 		try {
-			BufferedImage charIMG = ImageIO.read(new File("./src/com/stratego/assets/piece icons/" + rank + ".png"));
+			BufferedImage charIMG = ImageIO.read(Player.class.getResource("assets/piece icons/" + rank + ".png"));
 			g.drawImage(charIMG, 33, 35, 62, 75, null);
 		}catch(IOException e) {
 			e.printStackTrace();
