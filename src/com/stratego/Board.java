@@ -27,4 +27,18 @@ public class Board {
 	{
 		board[y][x] = p;
 	}
+	
+	public int checkNumberOfPieces(int playerNo) {
+		int count = 0;
+		
+		for(int y = 0; y < 10; y++) {
+			for(int x = 0; x < 10; x++) {
+				if(board[y][x] != null ? board[y][x].getOwner() == playerNo : false) {
+					count++;
+				}
+			}
+		}
+		
+		return count;
+	}
 }

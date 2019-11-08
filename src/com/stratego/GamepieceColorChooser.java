@@ -19,10 +19,11 @@ public class GamepieceColorChooser extends JPanel{
 	Color currentColor;
 	String currentName;
 	
-	GamepieceColorChooser(String defaultName){
+	GamepieceColorChooser(String defaultName, Color playerColor){
 		super();
 		
 		currentName = defaultName;
+		this.currentColor = playerColor;
 		
 		setOpaque(false);
 		
@@ -46,10 +47,11 @@ public class GamepieceColorChooser extends JPanel{
 			
 			setLayout(new GridLayout(2, 1));
 			
-			customIcon = new PreviewIcon(Color.red);
+			customIcon = new PreviewIcon();
 			add(customIcon);
 			
 			customColor = new JColorChooser();
+			customColor.setColor(currentColor);
 			customColor.setOpaque(false);
 			
 			AbstractColorChooserPanel clearPanel = ColorChooserComponentFactory.getDefaultChooserPanels()[3];
@@ -106,9 +108,10 @@ public class GamepieceColorChooser extends JPanel{
 			BufferedImage normalPiece;
 			BufferedImage currentPiece;
 			
-			PreviewIcon(Color defaultColor) {
+			PreviewIcon() {
 				normalPiece = TextureManager.returnGrayPiece();
 				currentPiece = TextureManager.returnGrayPiece();
+				updateColor(currentColor);
 				setOpaque(false);
 			}
 			

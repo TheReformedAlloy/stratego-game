@@ -16,6 +16,7 @@ public class GraphicButton extends JComponent implements MouseListener{
 	String command;
 	
 	String text;
+	int margin = 0;
 	
 	GraphicButton(String text){
 		super();
@@ -24,6 +25,18 @@ public class GraphicButton extends JComponent implements MouseListener{
 		addMouseListener(this);
 		
 		this.text = text;
+		setFocusable(false);
+	}
+	
+	GraphicButton(String text, int margin) {
+		super();
+		
+		enableInputMethods(true);
+		addMouseListener(this);
+		
+		this.text = text;
+		this.margin = margin;
+		
 		setFocusable(false);
 	}
 	
@@ -71,10 +84,9 @@ public class GraphicButton extends JComponent implements MouseListener{
 			g2d.setColor(new Color(95, 76, 76));
 			g2d.drawImage(TextureManager.BUTTON_HOVER, hBoxOffset, vBoxOffset, buttonWidth, buttonHeight, null);
 		}else {
-			buttonWidth -= 50;
-			buttonHeight -= 20;
-			hBoxOffset += 25;
-			vBoxOffset += 10;
+			/*
+			 * buttonWidth -= 50; buttonHeight -= 20; hBoxOffset += 25; vBoxOffset += 10;
+			 */
 			g2d.setColor(new Color(70, 51, 51));
 			g2d.drawImage(TextureManager.BUTTON, hBoxOffset, vBoxOffset, buttonWidth, buttonHeight, null);
 		}

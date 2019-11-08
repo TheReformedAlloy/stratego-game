@@ -12,6 +12,7 @@ public class Piece {
 			entry("sergeant", 4),
 			entry("lieutenant", 5),
 			entry("captain", 6),
+			entry("major", 7),
 			entry("colonel", 8),
 			entry("general", 9),
 			entry("marshal", 10),

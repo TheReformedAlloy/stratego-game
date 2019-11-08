@@ -81,4 +81,8 @@ public class Player {
 		temp--;
 		unplacedPieces.put(rank, temp);
 	}
+
+	public String getPlayerName() {
+		return playerName;
+	}
 }

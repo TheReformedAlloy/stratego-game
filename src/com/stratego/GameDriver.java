@@ -47,7 +47,20 @@ public class GameDriver {
 	//Toggles whether the GUI displayed currently is in fullscreen mode and displays the GUI with the new:
 	public void toggleFullScreen() {
 		isFullScreen = !isFullScreen;
-		changeViewState(viewState);
+
+		if(isFullScreen) {
+			view.dispose();
+			view.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			view.setResizable(false);
+			view.setUndecorated(true);
+			view.setVisible(true);
+		}else {
+			view.dispose();
+			view.setResizable(false);
+			view.setUndecorated(false);
+			view.setVisible(true);
+			view.setSize(1280, 720);
+		}
 	}
 	
 	public boolean isSoundOn() {

@@ -11,8 +11,9 @@ public class GameView extends JFrame {
 	JPanel innerPanel;
 	CardLayout cards;
 	
-	GameInitPanel setupPanel;
-	GameSetupPanel gamePanel;
+	GameInitPanel initPanel;
+	GameSetupPanel setupPanel;
+	GamePlayPanel gamePanel;
 	
 	Game gameModel;
 	
@@ -37,8 +38,8 @@ public class GameView extends JFrame {
 		cards = new CardLayout();
 		innerPanel.setLayout(cards);
 		
-		setupPanel = new GameInitPanel(new PlayerSetupListener());
-		innerPanel.add(setupPanel, "Setup");
+		initPanel = new GameInitPanel(new PlayerSetupListener());
+		innerPanel.add(initPanel, "Setup");
 		
 		add(innerPanel);
 		
@@ -51,12 +52,16 @@ public class GameView extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("start_setup")) {
-				gameModel = new Game(setupPanel.getPlayer1(), setupPanel.getPlayer2());
-				gamePanel = new GameSetupPanel(this, gameModel);
+				gameModel = new Game(initPanel.getPlayer1(), initPanel.getPlayer2());
+				setupPanel = new GameSetupPanel(this, gameModel);
+				innerPanel.add(setupPanel, "Setup");
+				cards.show(innerPanel, "Setup");
+			} else if (e.getActionCommand().equals("start_game")) {
+				gamePanel = new GamePlayPanel(gameModel);
 				innerPanel.add(gamePanel, "Game");
 				cards.show(innerPanel, "Game");
-			} else if (e.getActionCommand().equals("start_game")) {
-				new GamePlayPanel(gameModel);
+			} else {
+				System.out.println(gameModel.player1.getNumberOfRank("general"));
 			}
 		}
 	}

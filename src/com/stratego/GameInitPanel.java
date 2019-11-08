@@ -76,10 +76,10 @@ public class GameInitPanel extends BackgroundPanel{
 			
 			setOpaque(false);
 			
-			leftPanel = new GamepieceColorChooser(player1Name);
+			leftPanel = new GamepieceColorChooser(player1Name, player1Color);
 			add(leftPanel);
 			
-			rightPanel = new GamepieceColorChooser(player2Name);
+			rightPanel = new GamepieceColorChooser(player2Name, player2Color);
 			add(rightPanel);
 		}
 	}
