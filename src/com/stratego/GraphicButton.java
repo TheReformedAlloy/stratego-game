@@ -118,10 +118,7 @@ public class GraphicButton extends JComponent implements MouseListener{
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		mousePressed = true;
-		repaint();
-	}
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
