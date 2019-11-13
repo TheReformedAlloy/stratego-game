@@ -51,16 +51,6 @@ public class GamePlayPanel extends BackgroundPanel {
 				bPanelConstraints.weightx = 1;
 				bPanelConstraints.fill = GridBagConstraints.BOTH;
 			add(new BottomPanel(), bPanelConstraints);
-			
-			GridBagConstraints spacerConstraints = new GridBagConstraints();
-				spacerConstraints.gridx = 0;
-				spacerConstraints.gridy = 7;
-				spacerConstraints.gridheight = 1;
-				spacerConstraints.gridwidth = 1;
-				spacerConstraints.weightx = 1;
-				spacerConstraints.weighty = 1;
-				spacerConstraints.fill = GridBagConstraints.BOTH;
-			add(new EmptyPanel(), spacerConstraints);
 				
 		}
 		
