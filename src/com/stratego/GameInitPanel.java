@@ -99,11 +99,11 @@ public class GameInitPanel extends BackgroundPanel{
 	}
 	
 	public Player getPlayer1() {
-		return new Player(player1Color, player1Name, player1Image);
+		return new Player(player1Color, player1Name, 1, player1Image);
 	}
 	
 	public Player getPlayer2() {
-		return new Player(player2Color, player2Name, player2Image);
+		return new Player(player2Color, player2Name, 2, player2Image);
 	}
 	
 	private class PlayerListener implements ActionListener {

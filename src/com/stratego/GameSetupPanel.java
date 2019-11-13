@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class GameSetupPanel extends BackgroundPanel {
 	
-	int whoseTurnIsIt;
+	int whoseTurnIsIt = 1;
 	ActionListener butListener;
 	
 	Game gameModel;
@@ -24,8 +24,6 @@ public class GameSetupPanel extends BackgroundPanel {
 		
 		this.butListener = butListener;
 		this.gameModel = gameModel;
-		
-		whoseTurnIsIt = 1;
 		
 		userDisplayPanel = new UserDisplayPanel();
 		pieceSelector = new PieceSelectorPanel();
@@ -294,7 +292,7 @@ public class GameSetupPanel extends BackgroundPanel {
 
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					if(!icon.getText().equals("x0")) {
+					if(!icon.getText().equals("x0") && pieceSelected != null ? pieceSelected.getRank() !=  rank : false) {
 						setBackground(Color.LIGHT_GRAY);
 					}
 				}
@@ -336,6 +334,11 @@ public class GameSetupPanel extends BackgroundPanel {
 				exitButton.addActionListener(GameDriver.getInstance().getStateChangeListener());
 				add(exitButton);
 				
+				GraphicButton shuffleButton = new GraphicButton("Shuffle Pieces");
+				shuffleButton.setActionCommand("shuffle");
+				shuffleButton.addActionListener(new TurnListener());
+				add(shuffleButton);
+				
 				GraphicButton fullButton = new GraphicButton("Fullscreen Mode");
 				fullButton.setActionCommand("fullscreen");
 				fullButton.addActionListener(GameDriver.getInstance().getStateChangeListener());
@@ -358,6 +361,11 @@ public class GameSetupPanel extends BackgroundPanel {
 				exitButton.setActionCommand("main_menu");
 				exitButton.addActionListener(GameDriver.getInstance().getStateChangeListener());
 				add(exitButton);
+				
+				GraphicButton shuffleButton = new GraphicButton("Shuffle Pieces");
+				shuffleButton.setActionCommand("shuffle");
+				shuffleButton.addActionListener(new TurnListener());
+				add(shuffleButton);
 				
 				GraphicButton fullButton = new GraphicButton("Fullscreen Mode");
 				fullButton.setActionCommand("fullscreen");
@@ -385,6 +393,10 @@ public class GameSetupPanel extends BackgroundPanel {
 				}else {
 					JOptionPane.showMessageDialog(boardPanel, "You must place down all pieces on your side of the board before continuing.");
 				}
+			} else if(e.getActionCommand() == "shuffle") {
+				gameModel.shuffle(whoseTurnIsIt);
+				pieceSelector.redrawPieces();
+				boardPanel.repaint();
 			}
 		}
 	}

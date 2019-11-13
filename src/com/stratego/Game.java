@@ -29,4 +29,18 @@ public class Game {
 			return null;
 		}
 	}
+	
+	public void shuffle(int whoseTurnIsIt) {
+		Player playerRef = getPlayer(whoseTurnIsIt);
+		playerRef.setUnplacedToInit();
+		int yStart = whoseTurnIsIt == 1 ? 6 : 0;
+		
+		for(int i = yStart; i < yStart + 4; i++) {
+			for(int j = 0; j < 10; j++) {
+				Piece randPiece = playerRef.getRandomNewPiece();
+				playerRef.subUnplacedPiece(randPiece.getRank());
+				board.setLocation(j, i, randPiece);
+			}
+		}
+	}
 }

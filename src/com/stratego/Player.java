@@ -3,39 +3,27 @@
 import java.awt.*;
 import java.awt.image.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
-import static java.util.Map.entry;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
 public class Player {
 	Color pieceColor;
 	String playerName;
+	int turnOrder;
 	BufferedImage basePieceImage;
-	Map<String, BufferedImage> pieceImages = new HashMap<String, BufferedImage>();
+	HashMap<String, BufferedImage> pieceImages = new HashMap<String, BufferedImage>();
 	HashMap<String, Integer> unplacedPieces = new HashMap<String, Integer>();
 	
-	Player(Color pieceColor, String playerName, BufferedImage basePieceImage) {
+	Player(Color pieceColor, String playerName, int turnOrder, BufferedImage basePieceImage) {
 		this.pieceColor = pieceColor;
 		this.playerName = playerName;
+		this.turnOrder = turnOrder;
 		this.basePieceImage = basePieceImage;
 		
-		unplacedPieces.put("bomb", 6);
-		unplacedPieces.put("flag", 1);
-		unplacedPieces.put("spy", 1);
-		unplacedPieces.put("scout", 8);
-		unplacedPieces.put("miner", 5);
-		unplacedPieces.put("sergeant", 4);
-		unplacedPieces.put("lieutenant", 4);
-		unplacedPieces.put("captain", 4);
-		unplacedPieces.put("major", 3);
-		unplacedPieces.put("colonel", 2);
-		unplacedPieces.put("general", 1);
-		unplacedPieces.put("marshal", 1);
+		setUnplacedToInit();
 		
 		for(String rank : Piece.ranks.keySet()) {
 			pieceImages.put(rank, combineImage(rank));
@@ -70,6 +58,21 @@ public class Player {
 		return unplacedPieces.get(rank);
 	}
 	
+	public void setUnplacedToInit() {
+		unplacedPieces.put("bomb", 6);
+		unplacedPieces.put("flag", 1);
+		unplacedPieces.put("spy", 1);
+		unplacedPieces.put("scout", 8);
+		unplacedPieces.put("miner", 5);
+		unplacedPieces.put("sergeant", 4);
+		unplacedPieces.put("lieutenant", 4);
+		unplacedPieces.put("captain", 4);
+		unplacedPieces.put("major", 3);
+		unplacedPieces.put("colonel", 2);
+		unplacedPieces.put("general", 1);
+		unplacedPieces.put("marshal", 1);
+	}
+	
 	public void addUnplacedPiece(String rank) {
 		int temp = unplacedPieces.get(rank);
 		temp++;
@@ -82,6 +85,21 @@ public class Player {
 		unplacedPieces.put(rank, temp);
 	}
 
+	public Piece getRandomNewPiece() {
+		Random rand = new Random();
+		Object[] unplaced = unplacedPieces.keySet().toArray();
+		int randNo;
+		String generatedRank;
+		
+		do {
+			randNo = rand.nextInt(unplaced.length);
+			generatedRank = (String) unplaced[randNo];
+		}
+		while(unplacedPieces.get(generatedRank) == 0);
+		
+		return new Piece(turnOrder, generatedRank);
+	}
+	
 	public String getPlayerName() {
 		return playerName;
 	}
