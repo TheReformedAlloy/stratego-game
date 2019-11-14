@@ -57,7 +57,7 @@ public class GameView extends JFrame {
 				innerPanel.add(setupPanel, "Setup");
 				cards.show(innerPanel, "Setup");
 			} else if (e.getActionCommand().equals("start_game")) {
-				gamePanel = new GamePlayPanel(gameModel);
+				gamePanel = new GamePlayPanel(this, gameModel);
 				innerPanel.add(gamePanel, "Game");
 				cards.show(innerPanel, "Game");
 			} else {

@@ -25,7 +25,7 @@ public class GameSetupPanel extends BackgroundPanel {
 		this.butListener = butListener;
 		this.gameModel = gameModel;
 		
-		userDisplayPanel = new UserDisplayPanel();
+		userDisplayPanel = new UserDisplayPanel(whoseTurnIsIt, gameModel);
 		pieceSelector = new PieceSelectorPanel();
 		optionPanel = new BottomPanel();
 		
@@ -89,28 +89,6 @@ public class GameSetupPanel extends BackgroundPanel {
 			add(optionPanel, bPanelConstraints);			
 		}
 		
-	}
-	
-	private class UserDisplayPanel extends JPanel {
-		JLabel playNo = new JLabel();
-		JLabel name = new JLabel();
-		JLabel playerIcon = new JLabel();
-		
-		UserDisplayPanel() {
-			setLayout(new BorderLayout());
-			
-			changePlayer();
-			
-			add(playNo, BorderLayout.NORTH);
-			add(name, BorderLayout.SOUTH);
-			add(playerIcon, BorderLayout.CENTER);
-		}
-		
-		public void changePlayer() {
-			playNo.setText("Player " + Integer.toString(whoseTurnIsIt));
-			name.setText(gameModel.getPlayer(whoseTurnIsIt).getPlayerName());
-			playerIcon.setIcon(new ImageIcon(gameModel.getPlayer(whoseTurnIsIt).getImage("blank")));
-		}
 	}
 	
 	private class BoardPanel extends JPanel {
@@ -207,6 +185,7 @@ public class GameSetupPanel extends BackgroundPanel {
 			}
 		}
 	}
+	
 	
 	private class PieceSelectorPanel extends JPanel {
 		
@@ -386,7 +365,7 @@ public class GameSetupPanel extends BackgroundPanel {
 			if (e.getActionCommand() == "end_turn") {
 				if(gameModel.getBoard().checkNumberOfPieces(whoseTurnIsIt) == 40) {
 					whoseTurnIsIt = 2;
-					userDisplayPanel.changePlayer();
+					userDisplayPanel.changePlayer(whoseTurnIsIt, gameModel);
 					pieceSelector.redrawPieces();
 					boardPanel.repaint();
 					optionPanel.cards.show(optionPanel, "player2");
