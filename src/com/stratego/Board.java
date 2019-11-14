@@ -145,4 +145,15 @@ public class Board {
 		}
 		return moves;
 	}
+	
+	/* checkEncounter takes two Piece arguments and compares their .rank
+	 * it returns the winning Piece.*/
+	public Piece checkEncounter(Piece atkPiece, Piece defPiece)
+	{
+		if(atkPiece.getRankValue() > defPiece.getRankValue()) {
+			return atkPiece;
+		} else {
+			return defPiece;
+		}
+	}
 }

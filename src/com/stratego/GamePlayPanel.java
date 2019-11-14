@@ -212,7 +212,7 @@ public class GamePlayPanel extends BackgroundPanel {
 			if (e.getActionCommand() == "end_turn") {
 				if(gameModel.getBoard().checkNumberOfPieces(whoseTurnIsIt) == 40) {
 					whoseTurnIsIt = 2;
-					userDisplayPanel.changePlayer(whoseTurnIsIt, gameModel);
+					userDisplayPanel.displayPlayer(whoseTurnIsIt, gameModel);
 					boardPanel.repaint();
 					optionPanel.cards.show(optionPanel, "player2");
 				}else {
