@@ -2,8 +2,6 @@ package com.stratego;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
-import java.util.HashMap;
 
 import javax.swing.*;
 

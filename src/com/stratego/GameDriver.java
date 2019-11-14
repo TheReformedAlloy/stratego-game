@@ -1,7 +1,6 @@
 package com.stratego;
 
 import java.awt.event.*;
-import java.time.Clock;
 
 import javax.swing.*;
 
