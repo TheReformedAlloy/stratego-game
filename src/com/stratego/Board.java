@@ -41,4 +41,108 @@ public class Board {
 		
 		return count;
 	}
+	
+	//returns an array of the possible locations a chosen piece can move to
+	public int[][] getPossibleMoves(int x, int y) 
+	{
+		int[][] moves;      					//stores the possible moves
+		int owner;								//stores the owner of the selected piece
+		
+		if(getGridLocation(y, x).equals(null))	//makes sure there is a piece present in the selected space
+		{
+			return null;
+		}
+		
+		owner = getGridLocation(y, x).getOwner();
+		
+		if(getGridLocation(y, x).getRankValue() == 9)    //handles scouts
+		{
+			int location = 0;
+			moves = new int[18][2];
+			//the increment might need to be raised/lowered (based on case), decide in testing
+			for(int i = x; i > 1; i--)   //going left
+			{
+				if(getGridLocation(y, x-1).getOwner() != getGridLocation(y, x).getOwner())
+				{
+					moves[location][0] = x-1;
+					moves[location][1] = y;
+					location++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			for(int i = x; i < 8; i++)   //going right
+			{
+				if(getGridLocation(y, x+1).getOwner() != getGridLocation(y, x).getOwner())
+				{
+					moves[location][0] = x+1;
+					moves[location][1] = y;
+					location++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			for(int i = y; i > 1; i--)   //going down
+			{
+				if(getGridLocation(y-1, x).getOwner() != getGridLocation(y, x).getOwner())
+				{
+					moves[location][0] = x;
+					moves[location][1] = y-1;
+					location++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			for(int i = y; i < 8; i++)   //going up
+			{
+				if(getGridLocation(y+1, x).getOwner() != getGridLocation(y, x).getOwner())
+				{
+					moves[location][0] = x;
+					moves[location][1] = y+1;
+					location++;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		
+		else if(getGridLocation(y, x).getRankValue() == 0 || getGridLocation(y, x).getRankValue() == 11)  //handles bombs and flags
+		{
+			return null;
+		}
+		
+		else   //handles all pieces that move "normally"
+		{
+			moves = new int[4][4];
+			if(y+1 <= 9 && getGridLocation(y+1, x).getOwner() != owner)		//space above the chosen one
+			{
+				moves[0][0] = x;    //stores the values in an x, y configuration. 
+				moves[0][1] = y+1;
+			}
+			else if(y-1 >= 0 && getGridLocation(y-1, x).getOwner() != owner)	//space below the chosen one
+			{
+				moves[1][0] = x;    //stores the values in an x, y configuration. 
+				moves[1][1] = y-1;
+			}
+			else if(x-1 >= 0 && getGridLocation(y, x-1).getOwner() != owner)	//space to the left of the chosen one
+			{
+				moves[2][0] = x-1;    //stores the values in an x, y configuration. 
+				moves[2][1] = y;
+			}
+			else if(x+1 <= 9 && getGridLocation(y, x+1).getOwner() != owner)	//space to the right of the chosen one
+			{
+				moves[3][0] = x+1;    //stores the values in an x, y configuration. 
+				moves[3][1] = y;
+			}
+		}
+		return moves;
+	}
 }

@@ -30,6 +30,11 @@ public class Piece {
 		return rank;
 	}
 	
+	public int getRankValue()
+	{
+		return ranks.get(rank);
+	}
+	
 	public int getOwner() {
 		return owner;
 	}
