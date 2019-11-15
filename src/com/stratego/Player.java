@@ -14,6 +14,7 @@ public class Player {
 	String playerName;
 	int turnOrder;
 	BufferedImage basePieceImage;
+	BufferedImage playerPieceImage;
 	HashMap<String, BufferedImage> pieceImages = new HashMap<String, BufferedImage>();
 	HashMap<String, Integer> unplacedPieces = new HashMap<String, Integer>();
 	
@@ -22,6 +23,7 @@ public class Player {
 		this.playerName = playerName;
 		this.turnOrder = turnOrder;
 		this.basePieceImage = basePieceImage;
+		this.playerPieceImage = combineImage("crown");
 		
 		setUnplacedToInit();
 		
@@ -31,13 +33,13 @@ public class Player {
 		
 	}
 	
-	private BufferedImage combineImage(String rank) {
+	private BufferedImage combineImage(String imgName) {
 		BufferedImage combinedIMG = new BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = combinedIMG.getGraphics();
 		g.drawImage(basePieceImage, 0, 0, null);
 		
 		try {
-			BufferedImage charIMG = ImageIO.read(Player.class.getResource("assets/piece icons/" + rank + ".png"));
+			BufferedImage charIMG = ImageIO.read(Player.class.getResource("assets/piece icons/" + imgName + ".png"));
 			g.drawImage(charIMG, 33, 35, 62, 75, null);
 		}catch(IOException e) {
 			e.printStackTrace();
@@ -47,9 +49,11 @@ public class Player {
 	}
 	
 	public BufferedImage getImage(String rank) {
-		if(rank == "blank") {
+		if(rank.equals("blank")) {
 			return basePieceImage;
-		}else {
+		} else if(rank.equals("player")) {
+			return playerPieceImage;
+		} else {
 			return pieceImages.get(rank);
 		}
 	}

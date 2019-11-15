@@ -184,8 +184,7 @@ public class GameSetupPanel extends BackgroundPanel {
 				}
 			}
 		}
-	}
-	
+	}	
 	
 	private class PieceSelectorPanel extends JPanel {
 		
@@ -365,7 +364,7 @@ public class GameSetupPanel extends BackgroundPanel {
 			if (e.getActionCommand() == "end_turn") {
 				if(gameModel.getBoard().checkNumberOfPieces(whoseTurnIsIt) == 40) {
 					whoseTurnIsIt = 2;
-					userDisplayPanel.changePlayer(whoseTurnIsIt, gameModel);
+					userDisplayPanel.displayPlayer(whoseTurnIsIt, gameModel);
 					pieceSelector.redrawPieces();
 					boardPanel.repaint();
 					optionPanel.cards.show(optionPanel, "player2");

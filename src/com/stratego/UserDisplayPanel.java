@@ -1,12 +1,8 @@
 package com.stratego;
 
-import java.awt.BorderLayout;
-import java.awt.Font;
+import java.awt.*;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class UserDisplayPanel extends JPanel {
 	Font playerFont;
@@ -15,30 +11,28 @@ public class UserDisplayPanel extends JPanel {
 	JLabel name = new JLabel();
 	JLabel playerIcon = new JLabel();
 	
-	UserDisplayPanel(int whoseTurnIsIt, Game gameModel) {
+	UserDisplayPanel(int whoseTurnIsIt, Game gameModel) {		
+		displayPlayer(whoseTurnIsIt, gameModel);
 		
-		changePlayer(whoseTurnIsIt, gameModel);
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
-		JPanel innerContent = new JPanel();
-		innerContent.setLayout(new BoxLayout(innerContent, BoxLayout.PAGE_AXIS));
-		
-			playerFont = new Font("Verdana", Font.PLAIN, 48);
-			playNo.setFont(playerFont);
-			playNo.setAlignmentX(CENTER_ALIGNMENT);
-			innerContent.add(playNo, BorderLayout.NORTH);
-			playerIcon.setAlignmentX(CENTER_ALIGNMENT);
-			innerContent.add(playerIcon, BorderLayout.CENTER);
-			nameFont = new Font("Verdana", Font.PLAIN, 36);
-			name.setFont(nameFont);
-			name.setAlignmentX(CENTER_ALIGNMENT);
-			innerContent.add(name, BorderLayout.SOUTH);
-		
-		add(innerContent);
+		add(Box.createVerticalGlue());
+		playerFont = new Font("Verdana", Font.PLAIN, 48);
+		playNo.setFont(playerFont);
+		playNo.setAlignmentX(CENTER_ALIGNMENT);
+		add(playNo);
+		playerIcon.setAlignmentX(CENTER_ALIGNMENT);
+		add(playerIcon);
+		nameFont = new Font("Verdana", Font.PLAIN, 36);
+		name.setFont(nameFont);
+		name.setAlignmentX(CENTER_ALIGNMENT);
+		add(name);
+		add(Box.createVerticalGlue());
 	}
 	
-	public void changePlayer(int whoseTurnIsIt, Game gameModel) {
+	public void displayPlayer(int whoseTurnIsIt, Game gameModel) {
 		playNo.setText("Player " + Integer.toString(whoseTurnIsIt));
 		name.setText(gameModel.getPlayer(whoseTurnIsIt).getPlayerName());
-		playerIcon.setIcon(new ImageIcon(gameModel.getPlayer(whoseTurnIsIt).getImage("blank")));
+		playerIcon.setIcon(new ImageIcon(gameModel.getPlayer(whoseTurnIsIt).getImage("player")));
 	}
 }

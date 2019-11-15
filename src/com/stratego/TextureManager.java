@@ -2,10 +2,7 @@ package com.stratego;
 
 import java.awt.image.*;
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import javax.swing.*;
 
 public class TextureManager {
 	public static final BufferedImage GRAYPIECE = processImage("assets/tiles/grayPiece.png");
