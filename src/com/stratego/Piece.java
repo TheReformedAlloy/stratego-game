@@ -18,12 +18,20 @@ public class Piece {
 			entry("marshal", 10),
 			entry("bomb", 11));
 	
+	private static int currentId = 0;
+	
+	private static int getNewId() {
+		return currentId++;
+	}
+	
 	int owner;
+	int id;
 	String rank;
 	
 	Piece(int owner, String rank) {
 		this.owner = owner;
 		this.rank = rank;
+		this.id = getNewId();
 	}
 	
 	public String getRank() {
@@ -37,5 +45,9 @@ public class Piece {
 	
 	public int getOwner() {
 		return owner;
+	}
+
+	public int getId() {
+		return id;
 	}
 }

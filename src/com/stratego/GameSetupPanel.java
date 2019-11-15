@@ -184,8 +184,7 @@ public class GameSetupPanel extends BackgroundPanel {
 				}
 			}
 		}
-	}
-	
+	}	
 	
 	private class PieceSelectorPanel extends JPanel {
 		

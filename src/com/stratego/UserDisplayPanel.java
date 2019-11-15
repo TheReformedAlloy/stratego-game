@@ -33,6 +33,6 @@ public class UserDisplayPanel extends JPanel {
 	public void displayPlayer(int whoseTurnIsIt, Game gameModel) {
 		playNo.setText("Player " + Integer.toString(whoseTurnIsIt));
 		name.setText(gameModel.getPlayer(whoseTurnIsIt).getPlayerName());
-		playerIcon.setIcon(new ImageIcon(gameModel.getPlayer(whoseTurnIsIt).getImage("blank")));
+		playerIcon.setIcon(new ImageIcon(gameModel.getPlayer(whoseTurnIsIt).getImage("player")));
 	}
 }
