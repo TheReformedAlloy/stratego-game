@@ -27,7 +27,7 @@ public class Player {
 		
 		setUnplacedToInit();
 		
-		for(String rank : Piece.ranks.keySet()) {
+		for(String rank : Piece.ranks) {
 			pieceImages.put(rank, combineImage(rank));
 		}
 		

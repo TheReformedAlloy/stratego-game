@@ -34,7 +34,8 @@ public class GameView extends JFrame {
 		keyboard = new StandardKeyboardListener();
 		addKeyListener(keyboard);
 		
-		innerPanel = new EmptyPanel();
+		innerPanel = new JPanel();
+		innerPanel.setOpaque(false);
 		cards = new CardLayout();
 		innerPanel.setLayout(cards);
 		
@@ -57,11 +58,14 @@ public class GameView extends JFrame {
 				innerPanel.add(setupPanel, "Setup");
 				cards.show(innerPanel, "Setup");
 			} else if (e.getActionCommand().equals("start_game")) {
-				gamePanel = new GamePlayPanel(this, gameModel);
-				innerPanel.add(gamePanel, "Game");
-				cards.show(innerPanel, "Game");
-			} else {
-				System.out.println(gameModel.player1.getNumberOfRank("general"));
+				if(gameModel.getBoard().checkNumberOfPieces(gameModel.getWhoseTurn()) == 40) {
+					gameModel.switchTurn();
+					gamePanel = new GamePlayPanel(this, gameModel);
+					innerPanel.add(gamePanel, "Game");
+					cards.show(innerPanel, "Game");
+				}else {
+					JOptionPane.showMessageDialog(setupPanel, "You must place down all pieces on your side of the board before continuing.");
+				}
 			}
 		}
 	}

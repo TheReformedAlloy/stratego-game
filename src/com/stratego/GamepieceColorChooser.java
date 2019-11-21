@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.image.*;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.colorchooser.*;
 import javax.swing.event.*;
 
@@ -20,9 +22,14 @@ public class GamepieceColorChooser extends JPanel{
 		currentName = defaultName;
 		this.currentColor = playerColor;
 		
-		setOpaque(false);
-		
 		setLayout(new BorderLayout());
+		
+		
+		setBackground(new Color(246, 214, 164));
+		Border brownBevel = BorderFactory.createBevelBorder(BevelBorder.RAISED, new Color(157, 118, 93), new Color(125, 86, 61));
+		Border brownBorder = BorderFactory.createLineBorder(new Color(157, 118, 93), 10);
+		Border brownBevelBorder = BorderFactory.createCompoundBorder(brownBevel, brownBorder);
+		setBorder(brownBevelBorder);
 		
 		colorPanel = new ColorPanel();
 		
@@ -50,7 +57,7 @@ public class GamepieceColorChooser extends JPanel{
 			customColor.setOpaque(false);
 			
 			AbstractColorChooserPanel clearPanel = ColorChooserComponentFactory.getDefaultChooserPanels()[3];
-			clearPanel.setOpaque(false);
+			clearPanel.setBackground(new Color(246, 214, 164));
 			AbstractColorChooserPanel[] colorPanels = {clearPanel};
 			
 			customColor.setChooserPanels(colorPanels);
@@ -163,6 +170,7 @@ public class GamepieceColorChooser extends JPanel{
 		JTextField nameField;
 		
 		NamePanel(){
+			setOpaque(false);
 			JLabel nameLabel = new JLabel("Name: ");
 			nameLabel.setFont(new Font("Verdana", Font.PLAIN, 36));
 			add(nameLabel);

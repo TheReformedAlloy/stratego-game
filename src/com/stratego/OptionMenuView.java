@@ -47,15 +47,16 @@ public class OptionMenuView extends JFrame{
 			add(gameTitle, BorderLayout.NORTH);
 			
 			add(new OptionPanel(), BorderLayout.CENTER);
-			add(new EmptyPanel(), BorderLayout.EAST);
-			add(new EmptyPanel(), BorderLayout.WEST);
-			add(new EmptyPanel(),BorderLayout.SOUTH);
+			add(Box.createGlue(), BorderLayout.EAST);
+			add(Box.createGlue(), BorderLayout.WEST);
+			add(Box.createGlue(),BorderLayout.SOUTH);
 		}
 	}
 	
-	private class OptionPanel extends EmptyPanel {
+	private class OptionPanel extends JPanel {
 		
 		OptionPanel(){
+			setOpaque(false);
 			setLayout(new GridLayout(0,1));
 			
 			gameButton = new GraphicButton("Toggle Sound");

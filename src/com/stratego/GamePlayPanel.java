@@ -4,31 +4,32 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 
-public class GamePlayPanel extends BackgroundPanel {
-	
-	int whoseTurnIsIt = 1;
+public class GamePlayPanel extends JPanel {
 	boolean canMove = true;
 	ActionListener butListener;
 	
 	Game gameModel;
 	Piece pieceSelected;
 	
-	int lastClickX = 0;
-	int lastClickY = 0;
+	int sourceLocX = 0;
+	int sourceLocY = 0;
 	int[][] possibleMoves;
 	
 	UserDisplayPanel userDisplayPanel;
 	BoardPanel boardPanel;
-	BottomPanel optionPanel;
+	OptionPanel optionPanel;
 		
 	GamePlayPanel(ActionListener butListener, Game gameModel){
-		
 		this.butListener = butListener;
 		this.gameModel = gameModel;
 		
-		userDisplayPanel = new UserDisplayPanel(whoseTurnIsIt, gameModel);
-		optionPanel = new BottomPanel();
+		optionPanel = new OptionPanel();
+		userDisplayPanel = new UserDisplayPanel(gameModel, optionPanel);
+		
+		setBackground(new Color(147, 98, 86));
 		
 		setLayout(new BorderLayout());
 		
@@ -37,17 +38,17 @@ public class GamePlayPanel extends BackgroundPanel {
 	}
 
 	
-	private class MainPanel extends EmptyPanel {
+	private class MainPanel extends JPanel {
 		
 		MainPanel(){
-			super();
+			setOpaque(false);
 			
 			setLayout(new GridBagLayout());
 			
 			GridBagConstraints leftPanelConstraints = new GridBagConstraints();
 				leftPanelConstraints.gridx = 0;
 				leftPanelConstraints.gridy = 0;
-				leftPanelConstraints.gridheight = 2;
+				leftPanelConstraints.gridheight = 1;
 				leftPanelConstraints.gridwidth = 1;
 				leftPanelConstraints.weighty = 2;
 				leftPanelConstraints.weightx = 1;
@@ -57,20 +58,14 @@ public class GamePlayPanel extends BackgroundPanel {
 			GridBagConstraints mPanelConstraints = new GridBagConstraints();
 				mPanelConstraints.gridx = 1;
 				mPanelConstraints.gridy = 0;
+				mPanelConstraints.gridheight = 1;
+				mPanelConstraints.gridwidth = 7;
 				mPanelConstraints.weighty = 7;
 				mPanelConstraints.weightx = 6;
+				mPanelConstraints.insets = new Insets(10, 100, 10, 100);
 				mPanelConstraints.fill = GridBagConstraints.BOTH;
 			boardPanel = new BoardPanel();
-			add(boardPanel, mPanelConstraints);
-			
-			GridBagConstraints bPanelConstraints = new GridBagConstraints();
-				bPanelConstraints.gridx = 0;
-				bPanelConstraints.gridy = 7;
-				bPanelConstraints.gridwidth = 8;
-				bPanelConstraints.weighty = 1;
-				bPanelConstraints.weightx = 8;
-				bPanelConstraints.fill = GridBagConstraints.BOTH;
-			add(optionPanel, bPanelConstraints);			
+			add(boardPanel, mPanelConstraints);		
 		}
 		
 	}
@@ -86,8 +81,10 @@ public class GamePlayPanel extends BackgroundPanel {
 		BoardPanel(){
 			setOpaque(false);
 			
-			addMouseListener(new PieceMovementListener());
+			Border brownBevel = BorderFactory.createBevelBorder(BevelBorder.RAISED, new Color(157, 118, 93), new Color(125, 86, 61));
+			setBorder(brownBevel);
 			
+			addMouseListener(new PieceMovementListener());
 		}
 		
 		private class PieceMovementListener implements MouseListener {
@@ -105,49 +102,55 @@ public class GamePlayPanel extends BackgroundPanel {
 				clickY /= gridWidth;
 				
 				if(canMove) {
-					
 					if(((clickX > 1 && clickX < 4) || (clickX > 5 && clickX < 8)) && (clickY > 3 && clickY < 6)) {
 						JOptionPane.showMessageDialog(boardPanel, "Please select a location away from the water.");
 					} else if(pieceSelected == null) {
 						if(gameModel.getBoard().getGridLocation(clickX, clickY) != null) {
-							pieceSelected = gameModel.getBoard().getGridLocation(clickX, clickY);
-							possibleMoves = gameModel.getBoard().getPossibleMoves(clickX, clickY);
-						} else if(gameModel.getBoard().getGridLocation(clickX, clickY).getOwner() != whoseTurnIsIt) {
-							JOptionPane.showMessageDialog(boardPanel, "Please select a location with your own piece.");
+							if(gameModel.getBoard().getGridLocation(clickX, clickY).getOwner() == gameModel.getWhoseTurn()) {
+								pieceSelected = gameModel.getBoard().getGridLocation(clickX, clickY);
+								possibleMoves = gameModel.getBoard().getPossibleMoves(clickX, clickY);
+								sourceLocX = clickX;
+								sourceLocY = clickY;
+							} else {
+								JOptionPane.showMessageDialog(boardPanel, "Please select a location with your own piece.");
+							}
 						} else {
 							JOptionPane.showMessageDialog(boardPanel, "Please select a location with a piece.");
 						}
 					} else if(pieceSelected != null) {
-						if(possibleMoves != null) {
-							for(int[] move : possibleMoves) {
-								if(clickX == move[0] && clickY == move[1]) {
-									if(gameModel.getBoard().getGridLocation(clickX, clickY) != null) {
-										gameModel.getBoard().setLocation(clickX, clickY, gameModel.checkEncounter(pieceSelected, gameModel.getBoard().getGridLocation(clickX, clickY)));
-										pieceSelected = null;
-									} else {
-										gameModel.getBoard().setLocation(clickX, clickY, pieceSelected);
-										pieceSelected = null;
+						if(gameModel.getBoard().getGridLocation(clickX, clickY) != null ? pieceSelected.getOwner() != gameModel.getBoard().getGridLocation(clickX, clickY).getOwner() : true) {
+							if(possibleMoves != null) {
+								for(int[] move : possibleMoves) {
+									if(clickX == move[0] && clickY == move[1]) {
+										if(gameModel.getBoard().getGridLocation(clickX, clickY) != null) {
+											gameModel.getBoard().setLocation(clickX, clickY, gameModel.checkEncounter(pieceSelected, gameModel.getBoard().getGridLocation(clickX, clickY)));
+											pieceSelected = null;
+										} else {
+											gameModel.getBoard().setLocation(clickX, clickY, pieceSelected);
+											pieceSelected = null;
+										}
+										gameModel.getBoard().setLocation(sourceLocX, sourceLocY, null);
+										possibleMoves = null;
+										canMove = false;
+										break;
 									}
-									gameModel.getBoard().setLocation(lastClickX, lastClickY, null);
-									possibleMoves = null;
-									canMove = false;
-									break;
 								}
 							}
-						} else if(pieceSelected.getId() != gameModel.getBoard().getGridLocation(clickX, clickY).getId()) {
-							int changePiece = JOptionPane.showConfirmDialog(boardPanel, "Do you want to change to a different piece?");
-							if(changePiece == JOptionPane.OK_OPTION) {
-								pieceSelected = gameModel.getBoard().getGridLocation(clickX, clickY);
-								possibleMoves = gameModel.getBoard().getPossibleMoves(clickX, clickY);
+						} else {
+							if(pieceSelected.getId() != gameModel.getBoard().getGridLocation(clickX, clickY).getId()) {
+								int changePiece = JOptionPane.showConfirmDialog(boardPanel, "Do you want to change to a different piece?");
+								if(changePiece == JOptionPane.OK_OPTION) {
+									pieceSelected = gameModel.getBoard().getGridLocation(clickX, clickY);
+									possibleMoves = gameModel.getBoard().getPossibleMoves(clickX, clickY);
+									sourceLocX = clickX;
+									sourceLocY = clickY;
+								}
 							}
 						}
 					}
 				} else {
 					JOptionPane.showMessageDialog(boardPanel, "You have already made a move for this turn. Please switch turns.");
 				}
-				
-				lastClickX = clickX;
-				lastClickY = clickY;
 				
 				repaint();
 			}
@@ -173,13 +176,15 @@ public class GamePlayPanel extends BackgroundPanel {
 			boardHOffset = (getWidth() - boardWidth) / 2;
 			boardVOffset = (getHeight() - boardWidth) / 2;
 			
+			g.setColor(new Color(125, 86, 61));
+			g.fillRect(0, 0, getWidth(), getHeight());
 			g.drawImage(TextureManager.BOARD, boardHOffset, boardVOffset, boardWidth, boardWidth, null);
 			
 			for(int y = 0; y < 10; y++) {
 				for(int x = 0; x < 10; x++) {
 					Piece pieceAtLoc = gameModel.getBoard().getGridLocation(x, y);
 					if(pieceAtLoc != null) {
-						if(pieceAtLoc.getOwner() == whoseTurnIsIt) {
+						if(pieceAtLoc.getOwner() == gameModel.getWhoseTurn()) {
 							g.drawImage(gameModel.getPlayer(pieceAtLoc.getOwner()).getImage(pieceAtLoc.getRank()), boardHOffset + gridWidth * x, boardVOffset + gridWidth * y, pieceWidth, pieceWidth,  null);
 						} else {
 							g.drawImage(gameModel.getPlayer(pieceAtLoc.getOwner()).getImage("blank"), boardHOffset + gridWidth * x, boardVOffset + gridWidth * y, pieceWidth, pieceWidth,  null);
@@ -200,11 +205,11 @@ public class GamePlayPanel extends BackgroundPanel {
 		}
 	}
 	
-	private class BottomPanel extends JPanel {
+	private class OptionPanel extends JPanel {
 		
 		CardLayout cards;
 		
-		BottomPanel(){
+		OptionPanel(){
 			setOpaque(false);
 			
 			setLayout(new BorderLayout());
@@ -216,27 +221,22 @@ public class GamePlayPanel extends BackgroundPanel {
 			ButtonPanel() {
 				setOpaque(false);
 				
-				setLayout(new GridLayout(1,0));
+				setLayout(new GridLayout(3,1));
 				
-				GraphicButton exitButton = new GraphicButton("Quit Game");
-				exitButton.setActionCommand("main_menu");
-				exitButton.addActionListener(GameDriver.getInstance().getStateChangeListener());
-				add(exitButton);
-				
-				GraphicButton shuffleButton = new GraphicButton("Shuffle Pieces");
-				shuffleButton.setActionCommand("shuffle");
-				shuffleButton.addActionListener(new TurnListener());
-				add(shuffleButton);
+				GraphicButton switchButton = new GraphicButton("Switch Turns");
+				switchButton.addActionListener(new TurnListener());
+				switchButton.setActionCommand("end_turn");
+				add(switchButton);
 				
 				GraphicButton fullButton = new GraphicButton("Fullscreen Mode");
 				fullButton.setActionCommand("fullscreen");
 				fullButton.addActionListener(GameDriver.getInstance().getStateChangeListener());
 				add(fullButton);
 				
-				GraphicButton switchButton = new GraphicButton("Switch Turns");
-				switchButton.addActionListener(new TurnListener());
-				switchButton.setActionCommand("end_turn");
-				add(switchButton);
+				GraphicButton exitButton = new GraphicButton("Quit Game");
+				exitButton.setActionCommand("main_menu");
+				exitButton.addActionListener(GameDriver.getInstance().getStateChangeListener());
+				add(exitButton);
 			}
 		}
 	}
@@ -245,8 +245,8 @@ public class GamePlayPanel extends BackgroundPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand() == "end_turn") {
-					whoseTurnIsIt = whoseTurnIsIt == 2 ? 1 : 2;
-					userDisplayPanel.displayPlayer(whoseTurnIsIt, gameModel);
+					gameModel.switchTurn();
+					userDisplayPanel.displayPlayer(gameModel);
 					boardPanel.repaint();
 					canMove = true;
 			}

@@ -11,6 +11,7 @@ public class TextureManager {
 	public static final BufferedImage BUTTON_PRESSED = processImage("assets/gui/ButtonPressed.png");
 	public static final BufferedImage BACKGROUND = processImage("assets/gui/Background.png");
 	public static final BufferedImage BOARD = processImage("assets/gui/Game Board.png");
+	public static final BufferedImage WOODBACK = processImage("assets/gui/WoodBackground.png");
 	
 	private static BufferedImage processImage(String path) {
 		try {

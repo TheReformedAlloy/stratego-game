@@ -36,13 +36,14 @@ public class GameInitPanel extends BackgroundPanel{
 		player2Color = Color.blue;
 		
 		add(new MainPanel());
-		add(new EmptyPanel(), BorderLayout.SOUTH);
+		
+		add(Box.createGlue(), BorderLayout.SOUTH);
 	}
 	
-	private class MainPanel extends EmptyPanel {
+	private class MainPanel extends JPanel {
 		
 		MainPanel(){
-			super();
+			setOpaque(false);
 			
 			setLayout(new GridBagLayout());
 			

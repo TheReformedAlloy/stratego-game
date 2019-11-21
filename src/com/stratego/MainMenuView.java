@@ -51,9 +51,9 @@ public class MainMenuView extends JFrame {
 			add(gameTitle, BorderLayout.NORTH);
 			
 			add(new MainPanel(), BorderLayout.CENTER);
-			add(new EmptyPanel(), BorderLayout.EAST);
-			add(new EmptyPanel(), BorderLayout.WEST);
-			add(new EmptyPanel(),BorderLayout.SOUTH);
+			add(Box.createGlue(), BorderLayout.EAST);
+			add(Box.createGlue(), BorderLayout.WEST);
+			add(Box.createGlue(),BorderLayout.SOUTH);
 		}
 	}
 	

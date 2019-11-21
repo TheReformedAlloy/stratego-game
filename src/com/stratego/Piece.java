@@ -1,22 +1,13 @@
 package com.stratego;
 
-import java.util.Map;
-import static java.util.Map.entry;
-
 public class Piece {
-	public static Map<String, Integer> ranks = Map.ofEntries(
-			entry("flag", 0),
-			entry("spy", 1),
-			entry("scout", 2),
-			entry("miner", 3),
-			entry("sergeant", 4),
-			entry("lieutenant", 5),
-			entry("captain", 6),
-			entry("major", 7),
-			entry("colonel", 8),
-			entry("general", 9),
-			entry("marshal", 10),
-			entry("bomb", 11));
+	public static String[] ranks = 	{
+			"flag", "spy",
+			"scout", "miner",
+			"sergeant", "lieutenant",
+			"captain", "major",
+			"colonel", "general",
+			"marshal", "bomb"};
 	
 	private static int currentId = 0;
 	
@@ -40,7 +31,7 @@ public class Piece {
 	
 	public int getRankValue()
 	{
-		return ranks.get(rank);
+		return java.util.Arrays.asList(ranks).indexOf(rank);
 	}
 	
 	public int getOwner() {

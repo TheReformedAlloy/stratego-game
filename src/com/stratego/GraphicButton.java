@@ -91,7 +91,7 @@ public class GraphicButton extends JComponent implements MouseListener{
 			g2d.drawImage(TextureManager.BUTTON, hBoxOffset, vBoxOffset, buttonWidth, buttonHeight, null);
 		}
 		
-		Font drawFont = new Font("Verdana", Font.PLAIN, buttonHeight/4);
+		Font drawFont = new Font("Verdana", Font.PLAIN, buttonHeight/2);
 		FontMetrics dfMetric = g2d.getFontMetrics(drawFont);
 		int hOffset = hBoxOffset + (buttonWidth / 2) - (dfMetric.stringWidth(text) / 2);
 		int vOffset = vBoxOffset + (buttonHeight / 2) + (dfMetric.getHeight() / 4);

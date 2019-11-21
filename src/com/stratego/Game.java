@@ -6,6 +6,7 @@ public class Game {
 	Player player2;
 	Board board;
 	
+	int whoseTurn = 1;
 
 	boolean win = false;
 	
@@ -29,42 +30,65 @@ public class Game {
 		}
 	}
 	
-	public void shuffle(int whoseTurnIsIt) {
-		Player playerRef = getPlayer(whoseTurnIsIt);
+	public void shuffle() {
+		Player playerRef = getCurrentPlayer();
 		playerRef.setUnplacedToInit();
-		int yStart = whoseTurnIsIt == 1 ? 6 : 0;
-		
-		for(int i = yStart; i < yStart + 4; i++) {
-			for(int j = 0; j < 10; j++) {
-				Piece randPiece = playerRef.getRandomNewPiece();
-				playerRef.subUnplacedPiece(randPiece.getRank());
-				board.setLocation(j, i, randPiece);
+		if(whoseTurn == 1) {
+			for(int i = 9; i > 5; i--) {
+				for(int j = 0; j < 10; j++) {
+					Piece randPiece = playerRef.getRandomNewPiece();
+					playerRef.subUnplacedPiece(randPiece.getRank());
+					board.setLocation(j, i, randPiece);
+				}
+			}
+		} else {
+			for(int i = 0; i < 4; i++) {
+				for(int j = 0; j < 10; j++) {
+					Piece randPiece = playerRef.getRandomNewPiece();
+					playerRef.subUnplacedPiece(randPiece.getRank());
+					board.setLocation(j, i, randPiece);
+				}
 			}
 		}
+		
 	}
 	
 	public Piece checkEncounter(Piece atkPiece, Piece defPiece)
 	{
-		if(atkPiece.rank.equals("spy")&& defPiece.getRankValue() == 10)
+		if(atkPiece.rank.equals("spy") && defPiece.getRankValue() == 10)
 		{
 			return atkPiece;
 		}
-		else if(atkPiece.rank.equals("miner")&& defPiece.getRankValue() == 11) 
+		else if(atkPiece.rank.equals("miner") && defPiece.getRankValue() == 11) 
 		{
 			return atkPiece;
 		}
 		else if(defPiece.getRankValue() == 0) 
 		{
 			win = true;
-			return defPiece;
+			return atkPiece;
 		}
 		else if(atkPiece.getRankValue() > defPiece.getRankValue())
 		{
 			return atkPiece;
 		}
-		else  
-		{
+		else if(atkPiece.getRankValue() == atkPiece.getRankValue()) {
+			return null;
+		}
+		else {
 			return defPiece;
 		}
+	}
+	
+	public void switchTurn() {
+		whoseTurn = whoseTurn == 2 ? 1 : 2;
+	}
+
+	public int getWhoseTurn() {
+		return whoseTurn;
+	}
+
+	public Player getCurrentPlayer() {
+		return getPlayer(whoseTurn);
 	}
 }

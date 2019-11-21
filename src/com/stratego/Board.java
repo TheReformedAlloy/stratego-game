@@ -139,7 +139,6 @@ public class Board {
 					move[0] = -1;
 					move[1] = -1;
 				}
-				System.out.println(y-1 >= 0 && getGridLocation(x, y-1) != null ? getGridLocation(x, y-1).getOwner() != owner : true);
 				if(y+1 <= 9 && getGridLocation(x, y+1) != null ? getGridLocation(x, y+1).getOwner() != owner : true)		//space above the chosen one
 				{
 					moves[0][0] = x;    //stores the values in an x, y configuration. 
@@ -158,7 +157,6 @@ public class Board {
 				if(x+1 <= 9 && getGridLocation(x+1, y) != null ? getGridLocation(x+1, y).getOwner() != owner : true)	//space to the right of the chosen one
 				{
 					moves[3][0] = x+1;    //stores the values in an x, y configuration.
-					System.out.println(moves[3][0]);
 					moves[3][1] = y;
 				}
 			}
