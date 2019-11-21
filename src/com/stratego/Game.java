@@ -50,7 +50,6 @@ public class Game {
 				}
 			}
 		}
-		
 	}
 	
 	public Piece checkEncounter(Piece atkPiece, Piece defPiece)
@@ -72,10 +71,11 @@ public class Game {
 		{
 			return atkPiece;
 		}
-		else if(atkPiece.getRankValue() == atkPiece.getRankValue()) {
+		else if(atkPiece.getRankValue() == defPiece.getRankValue()) {
 			return null;
 		}
-		else {
+		else 
+		{
 			return defPiece;
 		}
 	}
