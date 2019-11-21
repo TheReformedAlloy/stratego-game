@@ -67,6 +67,10 @@ public class Board {
 				//the increment might need to be raised/lowered (based on case), decide in testing
 				for(int i = x - 1; i >= 0; i--)   //going left
 				{
+					if((i == 2 || i == 3 || i == 6 || i == 7) && (y == 4 || y == 5))	//keeps scouts out of the water
+					{
+						break;
+					}
 					if(getGridLocation(i, y) != null ? getGridLocation(x, y).getOwner() != getGridLocation(i, y).getOwner() : true)
 					{
 						moves[location][0] = i;
@@ -80,6 +84,10 @@ public class Board {
 				}
 				for(int i = x + 1; i <= 9; i++)   //going right
 				{
+					if((i == 2 || i == 3 || i == 6 || i == 7) && (y == 4 || y == 5))	//keeps scouts out of the water
+					{
+						break;
+					}
 					if(getGridLocation(i, y) != null ? getGridLocation(x, y).getOwner() != getGridLocation(i, y).getOwner() : true)
 					{
 						moves[location][0] = i;
@@ -93,6 +101,10 @@ public class Board {
 				}
 				for(int i = y - 1; i >= 0; i--)   //going up
 				{
+					if((i == 4 || i == 5) && (x == 2 || x == 3 || x == 6 || x == 7))	//keeps scouts out of the water
+					{
+						break;
+					}
 					if(getGridLocation(x, i) != null ? getGridLocation(x, y).getOwner() != getGridLocation(x, i).getOwner() : true)
 					{
 						moves[location][0] = x;
@@ -110,6 +122,10 @@ public class Board {
 				}
 				for(int i = y + 1; i <= 9; i++)   //going down 
 				{
+					if((i == 4 || i == 5) && (x == 2 || x == 3 || x == 6 || x == 7)) //keeps scouts out of the water
+					{
+						break;
+					}
 					if(getGridLocation(x, i) != null ? getGridLocation(x, y).getOwner() != getGridLocation(x, i).getOwner() : true)
 					{
 						moves[location][0] = x;
@@ -139,7 +155,7 @@ public class Board {
 					move[0] = -1;
 					move[1] = -1;
 				}
-				if(y+1 <= 9 && getGridLocation(x, y+1) != null ? getGridLocation(x, y+1).getOwner() != owner : true)		//space above the chosen one
+				if(y+1 <= 7 && getGridLocation(x, y+1) != null ? getGridLocation(x, y+1).getOwner() != owner : true)		//space above the chosen one
 				{
 					moves[0][0] = x;    //stores the values in an x, y configuration. 
 					moves[0][1] = y+1;
@@ -154,7 +170,7 @@ public class Board {
 					moves[2][0] = x-1;    //stores the values in an x, y configuration. 
 					moves[2][1] = y;
 				}
-				if(x+1 <= 9 && getGridLocation(x+1, y) != null ? getGridLocation(x+1, y).getOwner() != owner : true)	//space to the right of the chosen one
+				if(x+1 <= 7 && getGridLocation(x+1, y) != null ? getGridLocation(x+1, y).getOwner() != owner : true)	//space to the right of the chosen one
 				{
 					moves[3][0] = x+1;    //stores the values in an x, y configuration.
 					moves[3][1] = y;

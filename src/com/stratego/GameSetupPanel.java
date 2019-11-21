@@ -222,6 +222,7 @@ public class GameSetupPanel extends JPanel {
 		};
 		
 		public void redrawPieces() {
+			updatePieceCount();
 			for(String rank : Piece.ranks) {
 				panels.get(rank).setPieceImage(gameModel.getCurrentPlayer().getImage(rank));
 			}
@@ -294,14 +295,14 @@ public class GameSetupPanel extends JPanel {
 
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					if(!num.getText().equals("x0") && pieceSelected != null ? pieceSelected.getRank() !=  rank : true) {
+					if(!num.getText().equals("x0") && (pieceSelected != null ? pieceSelected.getRank() !=  rank : true)) {
 						setBackground(new Color(246, 230, 205));
 					}
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
-					if(!num.getText().equals("x0") && pieceSelected != null ? pieceSelected.getRank() != rank : true) {
+					if(!num.getText().equals("x0") && (pieceSelected != null ? pieceSelected.getRank() != rank : true)) {
 						setBackground(new Color(246, 214, 164));
 					}
 				}
