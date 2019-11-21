@@ -30,6 +30,10 @@ public class Game {
 		}
 	}
 	
+	public boolean getWinStatus() {
+		return win;
+	}
+	
 	public void shuffle() {
 		Player playerRef = getCurrentPlayer();
 		playerRef.setUnplacedToInit();
@@ -72,7 +76,7 @@ public class Game {
 		{
 			return atkPiece;
 		}
-		else if(atkPiece.getRankValue() == atkPiece.getRankValue()) {
+		else if(atkPiece.getRankValue() == defPiece.getRankValue()) {
 			return null;
 		}
 		else {
