@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class GameView extends JFrame {
+	private static final long serialVersionUID = 7297598809856376824L;
 	boolean isFullScreen;
 	KeyListener keyboard;
 	
@@ -31,7 +32,6 @@ public class GameView extends JFrame {
 		
 		setLayout(new BorderLayout());
 		
-		keyboard = new StandardKeyboardListener();
 		addKeyListener(keyboard);
 		
 		innerPanel = new JPanel();

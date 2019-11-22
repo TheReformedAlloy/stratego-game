@@ -104,7 +104,14 @@ public class GameDriver {
 			switch(e.getActionCommand()) {
 			//Check for GUI-switching commands:
 			case "main_menu":
-				changeViewState(GameState.MAINMENU);
+				if(viewState == GameState.GAMEDISPLAY) {
+					int quitting = JOptionPane.showConfirmDialog(view, "Are you sure you want to end the game early?");
+					if(quitting == JOptionPane.OK_OPTION) {
+						changeViewState(GameState.MAINMENU);
+					}
+				} else {
+					changeViewState(GameState.MAINMENU);
+				}
 				break;
 			case "options":
 				changeViewState(GameState.OPTIONMENU);

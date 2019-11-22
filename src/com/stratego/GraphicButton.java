@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class GraphicButton extends JComponent implements MouseListener{
-	
+	private static final long serialVersionUID = 6199235732279404886L;
 	private boolean mouseEntered = false;
 	private boolean mousePressed = false;
 	
@@ -78,17 +78,17 @@ public class GraphicButton extends JComponent implements MouseListener{
 		int vBoxOffset = (getHeight() - buttonHeight) / 2;
 		
 		if(mousePressed) {
-			g2d.setColor(new Color(45, 26, 26));
-			g2d.drawImage(TextureManager.BUTTON_PRESSED, hBoxOffset, vBoxOffset, buttonWidth, buttonHeight, null);
+			g2d.setColor(TextureManager.getInstance().getColor("font low"));
+			g2d.drawImage(TextureManager.getInstance().getImage("button press"), hBoxOffset, vBoxOffset, buttonWidth, buttonHeight, null);
 		}else if(mouseEntered) {
-			g2d.setColor(new Color(95, 76, 76));
-			g2d.drawImage(TextureManager.BUTTON_HOVER, hBoxOffset, vBoxOffset, buttonWidth, buttonHeight, null);
+			g2d.setColor(TextureManager.getInstance().getColor("font high"));
+			g2d.drawImage(TextureManager.getInstance().getImage("button hover"), hBoxOffset, vBoxOffset, buttonWidth, buttonHeight, null);
 		}else {
 			/*
 			 * buttonWidth -= 50; buttonHeight -= 20; hBoxOffset += 25; vBoxOffset += 10;
 			 */
-			g2d.setColor(new Color(70, 51, 51));
-			g2d.drawImage(TextureManager.BUTTON, hBoxOffset, vBoxOffset, buttonWidth, buttonHeight, null);
+			g2d.setColor(TextureManager.getInstance().getColor("font base"));
+			g2d.drawImage(TextureManager.getInstance().getImage("button"), hBoxOffset, vBoxOffset, buttonWidth, buttonHeight, null);
 		}
 		
 		Font drawFont = new Font("Verdana", Font.PLAIN, buttonHeight/2);

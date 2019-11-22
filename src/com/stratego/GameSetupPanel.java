@@ -3,14 +3,13 @@ package com.stratego;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import javax.swing.*;
-import javax.swing.border.*;
 
 public class GameSetupPanel extends JPanel {
-	
+	private static final long serialVersionUID = 1999846897104495339L;
+
 	ActionListener butListener;
 	
 	Game gameModel;
@@ -26,7 +25,7 @@ public class GameSetupPanel extends JPanel {
 		this.butListener = butListener;
 		this.gameModel = gameModel;
 		
-		setBackground(new Color(147, 98, 86));
+		setBackground(TextureManager.getInstance().getColor("bg base"));
 		
 		pieceSelector = new PieceSelectorPanel();
 		optionPanel = new OptionPanel();
@@ -41,7 +40,7 @@ public class GameSetupPanel extends JPanel {
 	private void placePiece (int x, int y) {
 		gameModel.getBoard().setLocation(x, y, pieceSelected);
 		gameModel.getCurrentPlayer().subUnplacedPiece(pieceSelected.getRank());
-		pieceSelector.panels.get(pieceSelected.getRank()).setBackground(new Color(246, 230, 205));
+		pieceSelector.panels.get(pieceSelected.getRank()).setBackground(TextureManager.getInstance().getColor("text high"));
 		pieceSelected = null;
 		pieceSelector.updatePieceCount();
 	}
@@ -53,7 +52,8 @@ public class GameSetupPanel extends JPanel {
 	}
 	
 	private class MainPanel extends JPanel {
-		
+		private static final long serialVersionUID = -4490157497028504961L;
+
 		MainPanel(){
 			setOpaque(false);
 			setLayout(new GridBagLayout());
@@ -89,17 +89,14 @@ public class GameSetupPanel extends JPanel {
 			JScrollPane pieceViewer = new JScrollPane(pieceSelector);
 			pieceViewer.setOpaque(false);
 			pieceViewer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-				Border brownBevel = BorderFactory.createBevelBorder(BevelBorder.RAISED, new Color(157, 118, 93), new Color(125, 86, 61));
-				Border brownBorder = BorderFactory.createLineBorder(new Color(157, 118, 93), 10);
-				Border brownBevelBorder = BorderFactory.createCompoundBorder(brownBevel, brownBorder);
-				pieceViewer.setBorder(brownBevelBorder);
+				pieceViewer.setBorder(TextureManager.getInstance().getBorder("textdb"));
 			add(pieceViewer, rightPanelConstraints);		
 		}
 		
 	}
 	
 	private class BoardPanel extends JPanel {
-		
+		private static final long serialVersionUID = 2191062659801999504L;
 		int boardWidth;
 		int gridWidth;
 		int pieceWidth;
@@ -110,8 +107,7 @@ public class GameSetupPanel extends JPanel {
 			setOpaque(false);
 			addMouseListener(new PiecePlacementListener());
 			
-			Border brownBevel = BorderFactory.createBevelBorder(BevelBorder.RAISED, new Color(157, 118, 93), new Color(125, 86, 61));
-			setBorder(brownBevel);
+			setBorder(TextureManager.getInstance().getBorder("boarddb"));
 		}
 		
 		private class PiecePlacementListener implements MouseListener {
@@ -155,6 +151,8 @@ public class GameSetupPanel extends JPanel {
 						JOptionPane.showMessageDialog(boardPanel, "Please select a piece to place!");
 					}
 				}
+				
+				userDisplayPanel.displayPiece(pieceSelected);
 				repaint();
 			}
 
@@ -180,9 +178,9 @@ public class GameSetupPanel extends JPanel {
 			boardHOffset = (getWidth() - boardWidth) / 2;
 			boardVOffset = (getHeight() - boardWidth) / 2;
 			
-			g.setColor(new Color(125, 86, 61));
+			g.setColor(TextureManager.getInstance().getColor("border base"));
 			g.fillRect(0, 0, getWidth(), getHeight());
-			g.drawImage(TextureManager.BOARD, boardHOffset, boardVOffset, boardWidth, boardWidth, null);
+			g.drawImage(TextureManager.getInstance().getImage("board"), boardHOffset, boardVOffset, boardWidth, boardWidth, null);
 			
 			for(int y = 0; y < 10; y++) {
 				for(int x = 0; x < 10; x++) {
@@ -200,7 +198,7 @@ public class GameSetupPanel extends JPanel {
 	}
 	
 	private class PieceSelectorPanel extends JPanel {
-		
+		private static final long serialVersionUID = -4903082359930665109L;
 		LinkedHashMap<String, PiecePanel> panels = new LinkedHashMap<String, PiecePanel>();
 		
 		PieceSelectorPanel() {
@@ -229,7 +227,7 @@ public class GameSetupPanel extends JPanel {
 		}
 		
 		private class PiecePanel extends JPanel {
-			
+			private static final long serialVersionUID = -2618548198093147801L;
 			JLabel icon;
 			JLabel num;
 			
@@ -243,7 +241,7 @@ public class GameSetupPanel extends JPanel {
 				
 				addMouseListener(new PieceSelectionListener());
 				
-				setBackground(new Color(246, 214, 164));
+				setBackground(TextureManager.getInstance().getColor("text base"));
 				
 				icon = new JLabel(new ImageIcon(gameModel.getCurrentPlayer().getImage(rank)));
 				add(icon);
@@ -260,9 +258,9 @@ public class GameSetupPanel extends JPanel {
 			
 			public void setNumLabel(int numLeft) {
 				if(numLeft == 0) {
-					setBackground(Color.DARK_GRAY);
+					setBackground(TextureManager.getInstance().getColor("text low"));
 				} else {
-					setBackground(new Color(246, 214, 164));
+					setBackground(TextureManager.getInstance().getColor("text base"));
 				}
 				num.setText("x" + Integer.toString(numLeft));
 			}
@@ -281,13 +279,15 @@ public class GameSetupPanel extends JPanel {
 					if(gameModel.getCurrentPlayer().getNumberOfRank(rank) > 0) {
 						if(pieceSelected != null) {
 							gameModel.getCurrentPlayer().addUnplacedPiece(pieceSelected.rank);
-							panels.get(pieceSelected.getRank()).setBackground(new Color(246, 230, 205));
+							panels.get(pieceSelected.getRank()).setBackground(TextureManager.getInstance().getColor("text high"));
 						}
 						pieceSelected = new Piece(gameModel.whoseTurn, rank);
-						setBackground(new Color(246, 230, 226));
+						setBackground(TextureManager.getInstance().getColor("text select"));
 					} else {
 						JOptionPane.showMessageDialog(boardPanel, "You cannot select any more of these pieces.");
 					}
+					
+					userDisplayPanel.displayPiece(pieceSelected);
 				}
 
 				@Override
@@ -296,14 +296,14 @@ public class GameSetupPanel extends JPanel {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					if(!num.getText().equals("x0") && (pieceSelected != null ? pieceSelected.getRank() !=  rank : true)) {
-						setBackground(new Color(246, 230, 205));
+						setBackground(TextureManager.getInstance().getColor("text high"));
 					}
 				}
 
 				@Override
 				public void mouseExited(MouseEvent e) {
 					if(!num.getText().equals("x0") && (pieceSelected != null ? pieceSelected.getRank() != rank : true)) {
-						setBackground(new Color(246, 214, 164));
+						setBackground(TextureManager.getInstance().getColor("text base"));
 					}
 				}
 			}
@@ -311,7 +311,7 @@ public class GameSetupPanel extends JPanel {
 	}
 	
 	private class OptionPanel extends JPanel {
-		
+		private static final long serialVersionUID = 3449413331716894116L;
 		CardLayout cards;
 		
 		OptionPanel(){
@@ -327,6 +327,8 @@ public class GameSetupPanel extends JPanel {
 		}
 		
 		private class Player1Panel extends JPanel {
+			private static final long serialVersionUID = -4189781202604281005L;
+
 			Player1Panel() {
 				setOpaque(false);
 				
@@ -355,6 +357,8 @@ public class GameSetupPanel extends JPanel {
 		}
 		
 		private class Player2Panel extends JPanel {
+			private static final long serialVersionUID = 3990173560168580410L;
+
 			Player2Panel() {
 				setOpaque(false);
 				
@@ -389,7 +393,7 @@ public class GameSetupPanel extends JPanel {
 			if (e.getActionCommand() == "end_turn") {
 				if(gameModel.getBoard().checkNumberOfPieces(gameModel.getWhoseTurn()) == 40) {
 					gameModel.switchTurn();
-					userDisplayPanel.displayPlayer(gameModel);
+					userDisplayPanel.displayPlayer();
 					pieceSelector.redrawPieces();
 					boardPanel.repaint();
 					optionPanel.cards.show(optionPanel, "player2");

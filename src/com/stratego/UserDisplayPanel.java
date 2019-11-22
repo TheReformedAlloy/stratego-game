@@ -3,11 +3,13 @@ package com.stratego;
 import java.awt.*;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 public class UserDisplayPanel extends JPanel {
-	JPanel innerPanel;
+	private static final long serialVersionUID = 1070856373548483936L;
+	Game gameModel;
+	
+	JPanel userPanel;
 	Font playerFont;
 	JLabel playNo = new JLabel();
 	Font nameFont;
@@ -16,9 +18,15 @@ public class UserDisplayPanel extends JPanel {
 	
 	JPanel optionPanel;
 	
+	JPanel piecePanel;
+	JLabel selectedIcon;
+	JLabel selectedName;
+	
 	UserDisplayPanel(Game gameModel, JPanel optionPanel) {
 		setOpaque(false);
-		displayPlayer(gameModel);
+		this.gameModel = gameModel; 
+		
+		displayPlayer();
 		
 		this.optionPanel = optionPanel;
 		
@@ -27,39 +35,58 @@ public class UserDisplayPanel extends JPanel {
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		setBorder(padding);
 		
-		add(Box.createVerticalStrut(50));
-		innerPanel = new JPanel();
-		innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.PAGE_AXIS));
-			Border brownBevel = BorderFactory.createBevelBorder(BevelBorder.RAISED, new Color(157, 118, 93), new Color(125, 86, 61));
-			Border brownBorder = BorderFactory.createLineBorder(new Color(157, 118, 93), 10);
-			Border brownBevelBorder = BorderFactory.createCompoundBorder(brownBevel, brownBorder);
-			innerPanel.setBorder(brownBevelBorder);
-			innerPanel.setBackground(new Color(246, 214, 164));
+		add(Box.createVerticalGlue());
+		userPanel = new JPanel();
+		userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.PAGE_AXIS));
+			userPanel.setBorder(TextureManager.getInstance().getBorder("textdb"));
+			userPanel.setBackground(TextureManager.getInstance().getColor("text base"));
 			playerFont = new Font("Verdana", Font.PLAIN, 48);
 			playNo.setFont(playerFont);
 			playNo.setAlignmentX(CENTER_ALIGNMENT);
-			innerPanel.add(playNo);
+			userPanel.add(playNo);
 			playerIcon.setAlignmentX(CENTER_ALIGNMENT);
-			innerPanel.add(playerIcon);
+			userPanel.add(playerIcon);
 			nameFont = new Font("Verdana", Font.PLAIN, 36);
 			name.setFont(nameFont);
 			name.setAlignmentX(CENTER_ALIGNMENT);
-			innerPanel.add(name);
-			innerPanel.add(optionPanel);
-		add(innerPanel);
+			userPanel.add(name);
+			userPanel.add(optionPanel);
+		add(userPanel);
 		add(Box.createVerticalStrut(20));
 		add(this.optionPanel);
-		add(Box.createVerticalStrut(10));
+		add(Box.createVerticalStrut(20));
+		piecePanel = new JPanel();
+		piecePanel.setLayout(new BoxLayout(piecePanel, BoxLayout.PAGE_AXIS));
+			piecePanel.setBorder(TextureManager.getInstance().getBorder("textdb"));
+			piecePanel.setBackground(TextureManager.getInstance().getColor("text base"));
+			JLabel selected = new JLabel("Selected:");
+			selected.setFont(new Font("Verdana", Font.PLAIN, 36));
+			selected.setAlignmentX(CENTER_ALIGNMENT);
+			piecePanel.add(selected);
+			selectedIcon = new JLabel(new ImageIcon(gameModel.getCurrentPlayer().getImage("blank")));
+			selectedIcon.setAlignmentX(CENTER_ALIGNMENT);
+			piecePanel.add(selectedIcon);
+			selectedName = new JLabel("N/A");
+			selectedName.setFont(new Font(("Verdana"), Font.PLAIN, 24));
+			selectedName.setAlignmentX(CENTER_ALIGNMENT);
+			piecePanel.add(selectedName);
+		add(piecePanel);
+		add(Box.createVerticalGlue());
 	}
 	
-	public void displayPlayer(Game gameModel) {
+	public void displayPlayer() {
 		playNo.setText("Player " + Integer.toString(gameModel.whoseTurn));
 		name.setText(gameModel.getCurrentPlayer().getPlayerName());
 		playerIcon.setIcon(new ImageIcon(gameModel.getCurrentPlayer().getImage("player")));
 	}
 	
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
+	public void displayPiece(Piece selectedPiece) {
+		if(selectedPiece != null) {
+			selectedIcon.setIcon(new ImageIcon(gameModel.getCurrentPlayer().getImage(selectedPiece.getRank())));
+			selectedName.setText(selectedPiece.getRank());
+		} else {
+			selectedIcon.setIcon(new ImageIcon(gameModel.getCurrentPlayer().getImage("blank")));
+			selectedName.setText("N/A");
+		}
 	}
 }

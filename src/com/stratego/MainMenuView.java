@@ -5,6 +5,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class MainMenuView extends JFrame {
+	private static final long serialVersionUID = 3146868548367039221L;
+
 	boolean isFullScreen;
 	
 	KeyListener keyboard;
@@ -22,7 +24,6 @@ public class MainMenuView extends JFrame {
 		
 		setLayout(new BorderLayout());
 		
-		keyboard = new StandardKeyboardListener();
 		addKeyListener(keyboard);
 		
 		add(new MenuPanel());
@@ -31,34 +32,30 @@ public class MainMenuView extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	public void changeFullScreen() {
-		setVisible(false);
-		MainMenuView newMenu = new MainMenuView(!isFullScreen);
-		dispose();
-	}
-	
-	private class MenuPanel extends BackgroundPanel {
-		MainPanel mainPanel;
+	private class MenuPanel extends GraphicPanel {
+		private static final long serialVersionUID = 1230171740611570657L;
+		
 		JLabel gameTitle;
 		
 		MenuPanel() {
-			super();
+			super(TextureManager.getInstance().getImage("background"));
 			setLayout(new BorderLayout(100, 15));
 			
-			gameTitle = new JLabel("Welcome to Stratego", JLabel.CENTER);
-			gameTitle.setFont(new Font("Verdana", Font.ITALIC, 72));
-			gameTitle.setForeground(Color.LIGHT_GRAY);
-			add(gameTitle, BorderLayout.NORTH);
+			JPanel titlePanel = new JPanel();
+			titlePanel.setBackground(TextureManager.getInstance().getColor("text base"));
+			titlePanel.setBorder(TextureManager.getInstance().getBorder("boarddb"));
+				gameTitle = new JLabel("Welcome to Stratego", JLabel.CENTER);
+				gameTitle.setFont(new Font("Verdana", Font.PLAIN, 72));
+				titlePanel.add(gameTitle);
+			add(titlePanel, BorderLayout.NORTH);
 			
 			add(new MainPanel(), BorderLayout.CENTER);
-			add(Box.createGlue(), BorderLayout.EAST);
-			add(Box.createGlue(), BorderLayout.WEST);
-			add(Box.createGlue(),BorderLayout.SOUTH);
+			setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 		}
 	}
 	
 	private class MainPanel extends JPanel {
-		
+		private static final long serialVersionUID = -2916829245822115605L;
 		GraphicButton gameButton;
 		GraphicButton optButton;
 		GraphicButton exitButton;
@@ -83,6 +80,8 @@ public class MainMenuView extends JFrame {
 			exitButton.addActionListener(GameDriver.getInstance().getStateChangeListener());
 			gameButton.setFocusable(false);
 			add(exitButton);
+			
+			setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
 		}
 	}
 }

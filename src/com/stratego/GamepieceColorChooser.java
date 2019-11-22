@@ -4,12 +4,11 @@ import java.awt.*;
 import java.awt.image.*;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 import javax.swing.colorchooser.*;
 import javax.swing.event.*;
 
 public class GamepieceColorChooser extends JPanel{
+	private static final long serialVersionUID = -5857658494711191520L;
 	ColorPanel colorPanel;
 	NamePanel namePanel;
 	
@@ -25,11 +24,8 @@ public class GamepieceColorChooser extends JPanel{
 		setLayout(new BorderLayout());
 		
 		
-		setBackground(new Color(246, 214, 164));
-		Border brownBevel = BorderFactory.createBevelBorder(BevelBorder.RAISED, new Color(157, 118, 93), new Color(125, 86, 61));
-		Border brownBorder = BorderFactory.createLineBorder(new Color(157, 118, 93), 10);
-		Border brownBevelBorder = BorderFactory.createCompoundBorder(brownBevel, brownBorder);
-		setBorder(brownBevelBorder);
+		setBackground(TextureManager.getInstance().getColor("text base"));
+		setBorder(TextureManager.getInstance().getBorder("textdb"));
 		
 		colorPanel = new ColorPanel();
 		
@@ -41,6 +37,7 @@ public class GamepieceColorChooser extends JPanel{
 	}
 		
 	private class ColorPanel extends JPanel {
+		private static final long serialVersionUID = -3733483172987839025L;
 		JColorChooser customColor;
 		PreviewIcon customIcon;
 		
@@ -57,56 +54,17 @@ public class GamepieceColorChooser extends JPanel{
 			customColor.setOpaque(false);
 			
 			AbstractColorChooserPanel clearPanel = ColorChooserComponentFactory.getDefaultChooserPanels()[3];
-			clearPanel.setBackground(new Color(246, 214, 164));
+			clearPanel.setBackground(TextureManager.getInstance().getColor("text base"));
 			AbstractColorChooserPanel[] colorPanels = {clearPanel};
 			
 			customColor.setChooserPanels(colorPanels);
 			customColor.setPreviewPanel(new JPanel());
 			customColor.getSelectionModel().addChangeListener(new CustomChangeListener());
 			add(customColor);
-			
-			//add(new ColorChooserPanel());
 		}
 		
-		/*private class ColorChooserPanel extends JPanel {
-			
-			JSlider redSlider;
-			JTextField redText;
-			JSlider greenSlider;
-			JTextField greenText;
-			JSlider blueSlider;
-			JTextField blueText;
-			
-			ColorChooserPanel(){
-				setOpaque(false);
-				
-				setLayout(new GridLayout(3,2));
-				
-				redSlider = new JSlider(0, 255, 255);
-				redSlider.setOpaque(false);
-				add(redSlider);
-				redText = new JTextField("255", 3);
-				redText.setOpaque(false);
-				add(redText);
-				
-				greenSlider = new JSlider(0, 255, 255);
-				greenSlider.setOpaque(false);
-				add(greenSlider);
-				greenText = new JTextField("255", 3);
-				greenText.setOpaque(false);
-				add(greenText);
-				
-				blueSlider = new JSlider(0, 255, 255);
-				blueSlider.setOpaque(false);
-				add(blueSlider);
-				blueText = new JTextField("255", 3);
-				blueText.setOpaque(false);
-				add(blueText);
-			}
-		}*/
-		
 		private class PreviewIcon extends JPanel{
-			
+			private static final long serialVersionUID = -2179382022452974454L;
 			BufferedImage normalPiece;
 			BufferedImage currentPiece;
 			
@@ -167,6 +125,7 @@ public class GamepieceColorChooser extends JPanel{
 	}
 
 	private class NamePanel extends JPanel {
+		private static final long serialVersionUID = -4942806878162261270L;
 		JTextField nameField;
 		
 		NamePanel(){

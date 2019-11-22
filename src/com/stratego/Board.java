@@ -1,7 +1,5 @@
 package com.stratego;
 
-import java.util.Arrays;
-
 public class Board {
 	
 	private Piece[][] board;   //this array needs to be a 10x10
@@ -48,135 +46,105 @@ public class Board {
 	public int[][] getPossibleMoves(int x, int y) 
 	{
 		int[][] moves;      					//stores the possible moves
-		int owner;								//stores the owner of the selected piece
 		
 		if (getGridLocation(x, y) == null)	//makes sure there is a piece present in the selected space
 		{
 			return null;
 		} else {
-			owner = getGridLocation(x, y).getOwner();
+			
+			boolean isScout = false;
+			int maxMoves = 4;
 			
 			if(getGridLocation(x, y).getRankValue() == 2)    //handles scouts
 			{
-				int location = 0;
-				moves = new int[18][2];
-				for (int[] move : moves) {
-					move[0] = -1;
-					move[1] = -1;
-				}
-				//the increment might need to be raised/lowered (based on case), decide in testing
-				for(int i = x - 1; i >= 0; i--)   //going left
-				{
-					if((i == 2 || i == 3 || i == 6 || i == 7) && (y == 4 || y == 5))	//keeps scouts out of the water
-					{
-						break;
-					}
-					if(getGridLocation(i, y) != null ? getGridLocation(x, y).getOwner() != getGridLocation(i, y).getOwner() : true)
-					{
-						moves[location][0] = i;
-						moves[location][1] = y;
-						location++;
-					}
-					else
-					{
-						break;
-					}
-				}
-				for(int i = x + 1; i <= 9; i++)   //going right
-				{
-					if((i == 2 || i == 3 || i == 6 || i == 7) && (y == 4 || y == 5))	//keeps scouts out of the water
-					{
-						break;
-					}
-					if(getGridLocation(i, y) != null ? getGridLocation(x, y).getOwner() != getGridLocation(i, y).getOwner() : true)
-					{
-						moves[location][0] = i;
-						moves[location][1] = y;
-						location++;
-					}
-					else
-					{
-						break;
-					}
-				}
-				for(int i = y - 1; i >= 0; i--)   //going up
-				{
-					if((i == 4 || i == 5) && (x == 2 || x == 3 || x == 6 || x == 7))	//keeps scouts out of the water
-					{
-						break;
-					}
-					if(getGridLocation(x, i) != null ? getGridLocation(x, y).getOwner() != getGridLocation(x, i).getOwner() : true)
-					{
-						moves[location][0] = x;
-						moves[location][1] = i;
-						location++;
-						if(getGridLocation(x, i) != null)
-						{
-							break;
-						}
-					}
-					else
-					{
-						break;
-					}
-				}
-				for(int i = y + 1; i <= 9; i++)   //going down 
-				{
-					if((i == 4 || i == 5) && (x == 2 || x == 3 || x == 6 || x == 7)) //keeps scouts out of the water
-					{
-						break;
-					}
-					if(getGridLocation(x, i) != null ? getGridLocation(x, y).getOwner() != getGridLocation(x, i).getOwner() : true)
-					{
-						moves[location][0] = x;
-						moves[location][1] = i;
-						location++;
-						if(getGridLocation(x, i) != null)
-						{
-							break;
-						}
-					}
-					else
-					{
-						break;
-					}
-				}
+				isScout = true;
+				maxMoves = 18;
 			}
-			
 			else if(getGridLocation(x, y).getRankValue() == 0 || getGridLocation(x, y).getRankValue() == 11)  //handles bombs and flags
 			{
 				return null;
 			}
+			int location = 0;
+			moves = new int[maxMoves][2];
+			for (int[] move : moves) {
+				move[0] = -1;
+				move[1] = -1;
+			}
+			int leftLimit = isScout ? 0 : x == 0 ? 0 : x - 1;
+			int rightLimit = isScout ? 9 : x == 9 ? 9 : x + 1;
+			int upLimit = isScout ? 0 : y == 0 ? 0 : y - 1;
+			int downLimit = isScout ? 9 : y == 9 ? 9 : y + 1;
 			
-			else   //handles all pieces that move "normally"
+			//the increment might need to be raised/lowered (based on case), decide in testing
+			for(int i = x - 1; i >= leftLimit; i--)   //going left
 			{
-				moves = new int[4][2];
-				for (int[] move : moves) {
-					move[0] = -1;
-					move[1] = -1;
-				}
-				if(y+1 <= 7 && getGridLocation(x, y+1) != null ? getGridLocation(x, y+1).getOwner() != owner : true)		//space above the chosen one
-				{
-					moves[0][0] = x;    //stores the values in an x, y configuration. 
-					moves[0][1] = y+1;
-				}
-				if(y-1 >= 0 && getGridLocation(x, y-1) != null ? getGridLocation(x, y-1).getOwner() != owner : true)	//space below the chosen one
-				{
-					moves[1][0] = x;    //stores the values in an x, y configuration. 
-					moves[1][1] = y-1;
-				}
-				if(x-1 >= 0 && getGridLocation(x-1, y) != null ? getGridLocation(x-1, y).getOwner() != owner : true)	//space to the left of the chosen one
-				{
-					moves[2][0] = x-1;    //stores the values in an x, y configuration. 
-					moves[2][1] = y;
-				}
-				if(x+1 <= 7 && getGridLocation(x+1, y) != null ? getGridLocation(x+1, y).getOwner() != owner : true)	//space to the right of the chosen one
-				{
-					moves[3][0] = x+1;    //stores the values in an x, y configuration.
-					moves[3][1] = y;
+				if(canMoveTo(x, y, i, y)) {
+					moves[location][0] = i;
+					moves[location][1] = y;
+					location++;
+					if(getGridLocation(i, y) != null) {
+						break;
+					}
+				} else {
+					break;
 				}
 			}
-			return moves;
+			for(int i = x + 1; i <= rightLimit; i++)   //going right
+			{
+				if(canMoveTo(x, y, i, y)) {
+					moves[location][0] = i;
+					moves[location][1] = y;
+					location++;
+					if(getGridLocation(i, y) != null) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			for(int i = y - 1; i >= upLimit; i--)   //going up
+			{
+				if(canMoveTo(x, y, x, i)) {
+					moves[location][0] = x;
+					moves[location][1] = i;
+					location++;
+					if(getGridLocation(x, i) != null) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+			for(int i = y + 1; i <= downLimit; i++)   //going down 
+			{
+				if(canMoveTo(x, y, x, i)) {
+					moves[location][0] = x;
+					moves[location][1] = i;
+					location++;
+					if(getGridLocation(x, i) != null) {
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+		}
+		
+		return moves;
+	}
+
+	private boolean canMoveTo(int startX, int startY, int newX, int newY) {
+		if((newX == 2 || newX == 3 || newX == 6 || newX == 7) && (newY == 4 || newY == 5))	//keeps scouts out of the water
+		{
+			return false;
+		}
+		if(getGridLocation(newX, newY) != null ? getGridLocation(startX, startY).getOwner() != getGridLocation(newX, newY).getOwner() : true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 }

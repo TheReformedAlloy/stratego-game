@@ -6,8 +6,9 @@ import java.awt.image.*;
 
 import javax.swing.*;
 
-public class GameInitPanel extends BackgroundPanel{
-	
+public class GameInitPanel extends GraphicPanel{
+	private static final long serialVersionUID = 1955627489428781035L;
+
 	ActionListener submitListener;
 	
 	GamepieceColorChooser leftPanel;
@@ -23,7 +24,7 @@ public class GameInitPanel extends BackgroundPanel{
 	BufferedImage player2Image;
 	
 	GameInitPanel(ActionListener submitListener) {
-		super();
+		super(TextureManager.getInstance().getImage("background"));
 		
 		setLayout(new BorderLayout());
 		
@@ -41,7 +42,8 @@ public class GameInitPanel extends BackgroundPanel{
 	}
 	
 	private class MainPanel extends JPanel {
-		
+		private static final long serialVersionUID = -9221511935291397389L;
+
 		MainPanel(){
 			setOpaque(false);
 			
@@ -69,6 +71,8 @@ public class GameInitPanel extends BackgroundPanel{
 	}
 	
 	private class MiddlePanel extends JPanel {
+		private static final long serialVersionUID = 1050328621738298057L;
+
 		MiddlePanel() {
 			GridLayout panelLayout = new GridLayout(1,2);
 			panelLayout.setHgap(20);
@@ -85,6 +89,8 @@ public class GameInitPanel extends BackgroundPanel{
 	}
 	
 	private class BottomPanel extends JPanel {
+		private static final long serialVersionUID = 6381609899320147379L;
+
 		BottomPanel() {
 			setLayout(new BorderLayout());
 			

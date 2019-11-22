@@ -4,10 +4,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 
 public class GamePlayPanel extends JPanel {
+	private static final long serialVersionUID = -7309809738430689934L;
 	boolean canMove = true;
 	boolean changingTurns = false;
 	ActionListener butListener;
@@ -30,17 +29,17 @@ public class GamePlayPanel extends JPanel {
 		optionPanel = new OptionPanel();
 		userDisplayPanel = new UserDisplayPanel(gameModel, optionPanel);
 		
-		setBackground(new Color(147, 98, 86));
+		setBackground(TextureManager.getInstance().getColor("bg base"));
 		
 		setLayout(new BorderLayout());
 		
 		add(new MainPanel());
 		
 	}
-
 	
 	private class MainPanel extends JPanel {
-		
+		private static final long serialVersionUID = -5766267547077339193L;
+
 		MainPanel(){
 			setOpaque(false);
 			
@@ -72,7 +71,7 @@ public class GamePlayPanel extends JPanel {
 	}
 		
 	private class BoardPanel extends JPanel {
-		
+		private static final long serialVersionUID = -1075682170099848439L;
 		int boardWidth;
 		int gridWidth;
 		int pieceWidth;
@@ -82,8 +81,7 @@ public class GamePlayPanel extends JPanel {
 		BoardPanel(){
 			setOpaque(false);
 			
-			Border brownBevel = BorderFactory.createBevelBorder(BevelBorder.RAISED, new Color(157, 118, 93), new Color(125, 86, 61));
-			setBorder(brownBevel);
+			setBorder(TextureManager.getInstance().getBorder("boarddb"));
 			
 			addMouseListener(new PieceMovementListener());
 		}
@@ -101,62 +99,64 @@ public class GamePlayPanel extends JPanel {
 				int clickY = e.getY();
 				clickY -= boardVOffset;
 				clickY /= gridWidth;
-				
-				if(canMove) {
-					if(((clickX > 1 && clickX < 4) || (clickX > 5 && clickX < 8)) && (clickY > 3 && clickY < 6)) {
-						JOptionPane.showMessageDialog(boardPanel, "Please select a location away from the water.");
-					} else if(pieceSelected == null) {
-						if(gameModel.getBoard().getGridLocation(clickX, clickY) != null) {
-							if(gameModel.getBoard().getGridLocation(clickX, clickY).getOwner() == gameModel.getWhoseTurn()) {
-								pieceSelected = gameModel.getBoard().getGridLocation(clickX, clickY);
-								possibleMoves = gameModel.getBoard().getPossibleMoves(clickX, clickY);
-								sourceLocX = clickX;
-								sourceLocY = clickY;
+				if(!(clickX < 0 || clickX > 9) || (clickY < 0 || clickY > 9)) {
+					if(canMove) {
+						if(((clickX > 1 && clickX < 4) || (clickX > 5 && clickX < 8)) && (clickY > 3 && clickY < 6)) {
+							JOptionPane.showMessageDialog(boardPanel, "Please select a location away from the water.");
+						} else if(pieceSelected == null) {
+							if(gameModel.getBoard().getGridLocation(clickX, clickY) != null) {
+								if(gameModel.getBoard().getGridLocation(clickX, clickY).getOwner() == gameModel.getWhoseTurn()) {
+									pieceSelected = gameModel.getBoard().getGridLocation(clickX, clickY);
+									possibleMoves = gameModel.getBoard().getPossibleMoves(clickX, clickY);
+									sourceLocX = clickX;
+									sourceLocY = clickY;
+								} else {
+									JOptionPane.showMessageDialog(boardPanel, "Please select a location with your own piece.");
+								}
 							} else {
-								JOptionPane.showMessageDialog(boardPanel, "Please select a location with your own piece.");
+								JOptionPane.showMessageDialog(boardPanel, "Please select a location with a piece.");
 							}
-						} else {
-							JOptionPane.showMessageDialog(boardPanel, "Please select a location with a piece.");
-						}
-					} else if(pieceSelected != null) {
-						if(gameModel.getBoard().getGridLocation(clickX, clickY) != null ? pieceSelected.getOwner() != gameModel.getBoard().getGridLocation(clickX, clickY).getOwner() : true) {
-							if(possibleMoves != null) {
-								for(int[] move : possibleMoves) {
-									
-									if(clickX == move[0] && clickY == move[1]) {
-										if(gameModel.getBoard().getGridLocation(clickX, clickY) != null) {
-											int confirmMove = JOptionPane.showConfirmDialog(boardPanel, "Do you wish to attack this piece?");
-											if(confirmMove == JOptionPane.OK_OPTION) {
-												gameModel.getBoard().setLocation(clickX, clickY, gameModel.checkEncounter(pieceSelected, gameModel.getBoard().getGridLocation(clickX, clickY)));
+						} else if(pieceSelected != null) {
+							if(gameModel.getBoard().getGridLocation(clickX, clickY) != null ? pieceSelected.getOwner() != gameModel.getBoard().getGridLocation(clickX, clickY).getOwner() : true) {
+								if(possibleMoves != null) {
+									for(int[] move : possibleMoves) {
+										
+										if(clickX == move[0] && clickY == move[1]) {
+											if(gameModel.getBoard().getGridLocation(clickX, clickY) != null) {
+												int confirmMove = JOptionPane.showConfirmDialog(boardPanel, "Do you wish to attack this piece?");
+												if(confirmMove == JOptionPane.OK_OPTION) {
+													gameModel.getBoard().setLocation(clickX, clickY, gameModel.checkEncounter(pieceSelected, gameModel.getBoard().getGridLocation(clickX, clickY)));
+													pieceSelected = null;
+													JOptionPane.showMessageDialog(boardPanel, (gameModel.getBoard().getGridLocation(clickX, clickY) != null ? gameModel.getPlayer(gameModel.getBoard().getGridLocation(clickX, clickY).getOwner()).getPlayerName() : "No one") + " wins this round.");
+												}
+											} else {
+												gameModel.getBoard().setLocation(clickX, clickY, pieceSelected);
 												pieceSelected = null;
-												JOptionPane.showMessageDialog(boardPanel, (gameModel.getBoard().getGridLocation(clickX, clickY) != null ? gameModel.getPlayer(gameModel.getBoard().getGridLocation(clickX, clickY).getOwner()).getPlayerName() : "No one") + " wins this round.");
 											}
-										} else {
-											gameModel.getBoard().setLocation(clickX, clickY, pieceSelected);
-											pieceSelected = null;
+											gameModel.getBoard().setLocation(sourceLocX, sourceLocY, null);
+											possibleMoves = null;
+											canMove = false;
+											break;
 										}
-										gameModel.getBoard().setLocation(sourceLocX, sourceLocY, null);
-										possibleMoves = null;
-										canMove = false;
-										break;
 									}
 								}
-							}
-						} else {
-							if(pieceSelected.getId() != gameModel.getBoard().getGridLocation(clickX, clickY).getId()) {
-								pieceSelected = gameModel.getBoard().getGridLocation(clickX, clickY);
-								possibleMoves = gameModel.getBoard().getPossibleMoves(clickX, clickY);
-								sourceLocX = clickX;
-								sourceLocY = clickY;
+							} else {
+								if(pieceSelected.getId() != gameModel.getBoard().getGridLocation(clickX, clickY).getId()) {
+									pieceSelected = gameModel.getBoard().getGridLocation(clickX, clickY);
+									possibleMoves = gameModel.getBoard().getPossibleMoves(clickX, clickY);
+									sourceLocX = clickX;
+									sourceLocY = clickY;
+								}
 							}
 						}
-					}
-				} else {
-					if(!gameModel.getWinStatus()) {
-						JOptionPane.showMessageDialog(boardPanel, "You have already made a move for this turn. Please switch turns.");
+					} else {
+						if(!gameModel.getWinStatus()) {
+							JOptionPane.showMessageDialog(boardPanel, "You have already made a move for this turn. Please switch turns.");
+						}
 					}
 				}
 				
+				userDisplayPanel.displayPiece(pieceSelected);
 				repaint();
 			}
 
@@ -183,9 +183,9 @@ public class GamePlayPanel extends JPanel {
 			
 			
 			
-			g.setColor(new Color(125, 86, 61));
+			g.setColor(TextureManager.getInstance().getColor("border base"));
 			g.fillRect(0, 0, getWidth(), getHeight());
-			g.drawImage(TextureManager.BOARD, boardHOffset, boardVOffset, boardWidth, boardWidth, null);
+			g.drawImage(TextureManager.getInstance().getImage("board"), boardHOffset, boardVOffset, boardWidth, boardWidth, null);
 			
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setColor(Color.yellow);
@@ -239,8 +239,7 @@ public class GamePlayPanel extends JPanel {
 	}
 	
 	private class OptionPanel extends JPanel {
-		
-		CardLayout cards;
+		private static final long serialVersionUID = -1495946805893261147L;
 		
 		OptionPanel(){
 			setOpaque(false);
@@ -251,6 +250,8 @@ public class GamePlayPanel extends JPanel {
 		}
 		
 		private class ButtonPanel extends JPanel {
+			private static final long serialVersionUID = -6012854594396096008L;
+
 			ButtonPanel() {
 				setOpaque(false);
 				
@@ -286,7 +287,7 @@ public class GamePlayPanel extends JPanel {
 					boardPanel.repaint();
 					JOptionPane.showMessageDialog(boardPanel, "Please switch turns with the other player.");
 					gameModel.switchTurn();
-					userDisplayPanel.displayPlayer(gameModel);
+					userDisplayPanel.displayPlayer();
 					changingTurns = false;
 					boardPanel.repaint();
 					canMove = true;
