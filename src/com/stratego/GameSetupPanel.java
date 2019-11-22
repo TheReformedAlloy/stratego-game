@@ -152,7 +152,7 @@ public class GameSetupPanel extends JPanel {
 					}
 				}
 				
-				userDisplayPanel.displayPiece(pieceSelected);
+				userDisplayPanel.displayPiece(pieceSelected, false);
 				repaint();
 			}
 
@@ -287,7 +287,7 @@ public class GameSetupPanel extends JPanel {
 						JOptionPane.showMessageDialog(boardPanel, "You cannot select any more of these pieces.");
 					}
 					
-					userDisplayPanel.displayPiece(pieceSelected);
+					userDisplayPanel.displayPiece(pieceSelected, false);
 				}
 
 				@Override

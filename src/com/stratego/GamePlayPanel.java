@@ -8,11 +8,13 @@ import javax.swing.*;
 public class GamePlayPanel extends JPanel {
 	private static final long serialVersionUID = -7309809738430689934L;
 	boolean canMove = true;
+	boolean hasAttacked = false;
 	boolean changingTurns = false;
 	ActionListener butListener;
 	
 	Game gameModel;
 	Piece pieceSelected;
+	Piece attackingPiece;
 	
 	int sourceLocX = 0;
 	int sourceLocY = 0;
@@ -125,9 +127,13 @@ public class GamePlayPanel extends JPanel {
 											if(gameModel.getBoard().getGridLocation(clickX, clickY) != null) {
 												int confirmMove = JOptionPane.showConfirmDialog(boardPanel, "Do you wish to attack this piece?");
 												if(confirmMove == JOptionPane.OK_OPTION) {
+													hasAttacked = true;
 													gameModel.getBoard().setLocation(clickX, clickY, gameModel.checkEncounter(pieceSelected, gameModel.getBoard().getGridLocation(clickX, clickY)));
+													attackingPiece = pieceSelected;
 													pieceSelected = null;
 													JOptionPane.showMessageDialog(boardPanel, (gameModel.getBoard().getGridLocation(clickX, clickY) != null ? gameModel.getPlayer(gameModel.getBoard().getGridLocation(clickX, clickY).getOwner()).getPlayerName() : "No one") + " wins this round.");
+												} else {
+													break;
 												}
 											} else {
 												gameModel.getBoard().setLocation(clickX, clickY, pieceSelected);
@@ -156,7 +162,7 @@ public class GamePlayPanel extends JPanel {
 					}
 				}
 				
-				userDisplayPanel.displayPiece(pieceSelected);
+				userDisplayPanel.displayPiece(pieceSelected, false);
 				repaint();
 			}
 
@@ -286,6 +292,12 @@ public class GamePlayPanel extends JPanel {
 					changingTurns = true;
 					boardPanel.repaint();
 					JOptionPane.showMessageDialog(boardPanel, "Please switch turns with the other player.");
+					if(hasAttacked) {
+						userDisplayPanel.displayPiece(attackingPiece, true);
+						attackingPiece = null;
+					} else {
+						userDisplayPanel.displayPiece(null, false);
+					}
 					gameModel.switchTurn();
 					userDisplayPanel.displayPlayer();
 					changingTurns = false;

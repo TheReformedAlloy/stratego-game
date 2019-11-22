@@ -19,6 +19,7 @@ public class UserDisplayPanel extends JPanel {
 	JPanel optionPanel;
 	
 	JPanel piecePanel;
+	JLabel selected;
 	JLabel selectedIcon;
 	JLabel selectedName;
 	
@@ -59,7 +60,7 @@ public class UserDisplayPanel extends JPanel {
 		piecePanel.setLayout(new BoxLayout(piecePanel, BoxLayout.PAGE_AXIS));
 			piecePanel.setBorder(TextureManager.getInstance().getBorder("textdb"));
 			piecePanel.setBackground(TextureManager.getInstance().getColor("text base"));
-			JLabel selected = new JLabel("Selected:");
+			selected = new JLabel("Selected:");
 			selected.setFont(new Font("Verdana", Font.PLAIN, 36));
 			selected.setAlignmentX(CENTER_ALIGNMENT);
 			piecePanel.add(selected);
@@ -80,13 +81,19 @@ public class UserDisplayPanel extends JPanel {
 		playerIcon.setIcon(new ImageIcon(gameModel.getCurrentPlayer().getImage("player")));
 	}
 	
-	public void displayPiece(Piece selectedPiece) {
+	public void displayPiece(Piece selectedPiece, boolean wasAttacked) {
 		if(selectedPiece != null) {
 			selectedIcon.setIcon(new ImageIcon(gameModel.getCurrentPlayer().getImage(selectedPiece.getRank())));
 			selectedName.setText(selectedPiece.getRank());
 		} else {
 			selectedIcon.setIcon(new ImageIcon(gameModel.getCurrentPlayer().getImage("blank")));
 			selectedName.setText("N/A");
+		}
+		
+		if(wasAttacked) {
+			selected.setText("Attacker:");
+		} else {
+			selected.setText("Selected:");
 		}
 	}
 }
