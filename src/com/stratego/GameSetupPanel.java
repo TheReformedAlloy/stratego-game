@@ -7,19 +7,39 @@ import java.util.LinkedHashMap;
 
 import javax.swing.*;
 
+/**
+ * Displays the board and the unplaced pieces of the current player and allows the player to place these unplaced pieces in an arrangment
+ * of their choice on their side of the board.
+ * 
+ * @author Clint Mooney
+ *
+ */
 public class GameSetupPanel extends JPanel {
 	private static final long serialVersionUID = 1999846897104495339L;
 
+	/** Listens to button presses and performs operations based on the buttons' <code>actionCommand</code>.*/
 	ActionListener butListener;
 	
+	/** A reference to an instance of the Game class representing the model used for display.*/
 	Game gameModel;
+	/** A reference to the currently selected piece.*/
 	Piece pieceSelected;
 	
+	/** Displays the current player's information.*/
 	UserDisplayPanel userDisplayPanel;
+	/** Displays the board and its pieces.*/
 	BoardPanel boardPanel;
+	/** Displays a player's currently unplaced pieces.*/
 	PieceSelectorPanel pieceSelector;
+	/** Refers to a number of buttons a player can use to change the game state.*/
 	OptionPanel optionPanel;
 		
+	/**
+	 * Creates a GameSetupPanel with a reference to the parent <code>ActionListener</code> and <code>Game</code>.
+	 * 
+	 * @param butListener {@link GameSetupPanel#butListener}
+	 * @param gameModel {@link GameSetupPanel#gameModel}
+	 */
 	GameSetupPanel(ActionListener butListener, Game gameModel){
 		
 		this.butListener = butListener;
@@ -37,6 +57,12 @@ public class GameSetupPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * Places the <code>pieceSelected</code> at a place on the <code>gameModel</code>'s board.
+	 * 
+	 * @param x the x-axis position at which <code>pieceSelected</code> will be placed.
+	 * @param y the y-axis position at which <code>pieceSelected</code> will be placed.
+	 */
 	private void placePiece (int x, int y) {
 		gameModel.getBoard().setLocation(x, y, pieceSelected);
 		gameModel.getCurrentPlayer().subUnplacedPiece(pieceSelected.getRank());
@@ -45,15 +71,30 @@ public class GameSetupPanel extends JPanel {
 		pieceSelector.updatePieceCount();
 	}
 	
+	/**
+	 * Removes a piece from a location on the <code>gameModel</code>'s board.
+	 * 
+	 * @param x the x-axis position at which a piece will be removed.
+	 * @param y the y-axis position at which a piece will be removed.
+	 */
 	private void removePiece (int x, int y) {
 		gameModel.getCurrentPlayer().addUnplacedPiece(gameModel.getBoard().getGridLocation(x, y).getRank());
 		gameModel.getBoard().setLocation(x, y, null);
 		pieceSelector.updatePieceCount();
 	}
 	
+	/**
+	 * Displays and organizes the contents of the panel.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class MainPanel extends JPanel {
 		private static final long serialVersionUID = -4490157497028504961L;
 
+		/**
+		 * Creates a default <code>MainPanel</code>.
+		 */
 		MainPanel(){
 			setOpaque(false);
 			setLayout(new GridBagLayout());
@@ -95,14 +136,29 @@ public class GameSetupPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * A panel to display the <code>gameModel</code>'s board.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class BoardPanel extends JPanel {
 		private static final long serialVersionUID = 2191062659801999504L;
+		
+		/** Stores the width of the board, which is used to display the image for the game board using this as its width and height.*/
 		int boardWidth;
+		/** Refers to the width of the individual squares on the game board on the screen.*/
 		int gridWidth;
+		/** Refers to the width of piece icons when they are drawn on the board.*/
 		int pieceWidth;
+		/** Refers to how far inset the board should be displayed horizontally.*/
 		int boardHOffset;
+		/** Refers to how far inset the board should be displayed vertically.*/
 		int boardVOffset;
 		
+		/**
+		 * Creates a BoardPanel.
+		 */
 		BoardPanel(){
 			setOpaque(false);
 			addMouseListener(new PiecePlacementListener());
@@ -110,11 +166,22 @@ public class GameSetupPanel extends JPanel {
 			setBorder(TextureManager.getInstance().getBorder("boarddb"));
 		}
 		
+		/**
+		 * A MouseListener to interpret where the user is interacting with the board.
+		 * 
+		 * @author Clint Mooney
+		 *
+		 */
 		private class PiecePlacementListener implements MouseListener {
-
+			/** 
+			 * Required override from <code>MouseListener</code> (Unused).
+			 */
 			@Override
 			public void mouseClicked(MouseEvent e) {}
-
+			
+			/**
+			 * Interprets the player's click to attempt to select the piece at the clicked location.
+			 */
 			@Override
 			public void mousePressed(MouseEvent e) {
 				int clickX = e.getX();
@@ -155,18 +222,30 @@ public class GameSetupPanel extends JPanel {
 				userDisplayPanel.displayPiece(pieceSelected, false);
 				repaint();
 			}
-
+			
+			/** 
+			 * Required override from <code>MouseListener</code> (Unused).
+			 */
 			@Override
 			public void mouseReleased(MouseEvent e) {}
-
+			
+			/** 
+			 * Required override from <code>MouseListener</code> (Unused).
+			 */
 			@Override
 			public void mouseEntered(MouseEvent e) {}
-
+			
+			/** 
+			 * Required override from <code>MouseListener</code> (Unused).
+			 */
 			@Override
 			public void mouseExited(MouseEvent e) {}
 			
 		}
 		
+		/**
+		 * Draws the board and the pieces currently placed on the board.
+		 */
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -197,10 +276,19 @@ public class GameSetupPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Displays a player's currently unplaced pieces and allows the player to select a piece to be placed on the board.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class PieceSelectorPanel extends JPanel {
 		private static final long serialVersionUID = -4903082359930665109L;
+		
+		/** Contains a panel for each type of piece that a player can use.*/
 		LinkedHashMap<String, PiecePanel> panels = new LinkedHashMap<String, PiecePanel>();
 		
+		/** Creates a default PieceSelectorPanel.*/
 		PieceSelectorPanel() {
 			setOpaque(false);
 			
@@ -212,6 +300,10 @@ public class GameSetupPanel extends JPanel {
 			}
 		}
 		
+		/**
+		 * Displays the number of pieces that can still be placed in each corresponding <code>PiecePanel</code> of
+		 * <code>panels</code>.
+		 */
 		public void updatePieceCount() {
 			for(String rank : Piece.ranks) {
 				int numLeft = gameModel.getCurrentPlayer().getNumberOfRank(rank);
@@ -219,6 +311,9 @@ public class GameSetupPanel extends JPanel {
 			}
 		};
 		
+		/**
+		 * Displays the image that should be shown in each corresponding <code>PiecePanel</code> of <code>panels</code>.
+		 */
 		public void redrawPieces() {
 			updatePieceCount();
 			for(String rank : Piece.ranks) {
@@ -226,13 +321,28 @@ public class GameSetupPanel extends JPanel {
 			}
 		}
 		
+		/**
+		 * Displays a piece, its rank name, and the number of these pieces that can be placed.
+		 * 
+		 * @author Clint Mooney
+		 *
+		 */
 		private class PiecePanel extends JPanel {
 			private static final long serialVersionUID = -2618548198093147801L;
+
+			/** Displays the image for a piece.*/
 			JLabel icon;
+			/** Displays the number of the piece that can placed.*/
 			JLabel num;
 			
+			/** Contains the rank of the piece.*/
 			String rank;
 			
+			/**
+			 * Creates a PiecePanel corresponding to a certain type of piece.
+			 * 
+			 * @param rank denotes the type of piece to display.
+			 */
 			PiecePanel(String rank) {
 				this.rank = rank;
 				String rankCap = Character.toUpperCase(rank.charAt(0)) + rank.substring(1);
@@ -256,6 +366,12 @@ public class GameSetupPanel extends JPanel {
 				add(textPanel);
 			}
 			
+			/**
+			 * Replaces the number of pieces of this <code>PiecePanel</code> to the inputted value and changes the color based on whether
+			 * pieces can still be placed.
+			 * 
+			 * @param numLeft refers to the number of pieces which can still be placed.
+			 */
 			public void setNumLabel(int numLeft) {
 				if(numLeft == 0) {
 					setBackground(TextureManager.getInstance().getColor("text low"));
@@ -265,15 +381,32 @@ public class GameSetupPanel extends JPanel {
 				num.setText("x" + Integer.toString(numLeft));
 			}
 			
+			/**
+			 * Sets the image displayed in <code>icon</code> to a new image.
+			 * 
+			 * @param pieceIMG the image to be displayed.
+			 */
 			public void setPieceImage(BufferedImage pieceIMG) {
 				icon.setIcon(new ImageIcon(pieceIMG));
 			}
 			
+			/**
+			 * Listens for interaction with <code>PiecePanel</code>.
+			 * 
+			 * @author Clint Mooney
+			 *
+			 */
 			private class PieceSelectionListener implements MouseListener {
-
+				/** 
+				 * Required override from <code>MouseListener</code> (Unused).
+				 */
 				@Override
 				public void mouseClicked(MouseEvent e) {}
 
+				/**
+				 * When the left mouse is pressed on a <code>PiecePanel</code>, the corresponding <code>Piece</code> is
+				 * made the value of <code>pieceSelected</code>. If there are none left, an error is shown.
+				 */
 				@Override
 				public void mousePressed(MouseEvent e) {
 					if(gameModel.getCurrentPlayer().getNumberOfRank(rank) > 0) {
@@ -289,17 +422,24 @@ public class GameSetupPanel extends JPanel {
 					
 					userDisplayPanel.displayPiece(pieceSelected, false);
 				}
-
+				/** 
+				 * Required override from <code>MouseListener</code> (Unused).
+				 */
 				@Override
 				public void mouseReleased(MouseEvent e) {}
-
+				
+				/**
+				 * Highlights the <code>PiecePanel</code> if it is able to be selected when the mouse enters its bounds.
+				 */
 				@Override
 				public void mouseEntered(MouseEvent e) {
 					if(!num.getText().equals("x0") && (pieceSelected != null ? pieceSelected.getRank() !=  rank : true)) {
 						setBackground(TextureManager.getInstance().getColor("text high"));
 					}
 				}
-
+				/**
+				 * De-highlights the <code>PiecePanel</code> if it is able to be selected when the mouse enters its bounds.
+				 */
 				@Override
 				public void mouseExited(MouseEvent e) {
 					if(!num.getText().equals("x0") && (pieceSelected != null ? pieceSelected.getRank() != rank : true)) {
@@ -310,10 +450,21 @@ public class GameSetupPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Displays buttons for the user to interact with to change the game state or switch turns.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class OptionPanel extends JPanel {
 		private static final long serialVersionUID = 3449413331716894116L;
+		
+		/** Allows the <code>OptionPanel</code> to switch between its internal panels.*/
 		CardLayout cards;
 		
+		/**
+		 * Creates a default <code>OptionPanel</code>.
+		 */
 		OptionPanel(){
 			setOpaque(false);
 			
@@ -326,9 +477,16 @@ public class GameSetupPanel extends JPanel {
 			cards.show(this, "player1");
 		}
 		
+		/**
+		 * Displays options available for Player One.
+		 * 
+		 * @author Clint Mooney
+		 *
+		 */
 		private class Player1Panel extends JPanel {
 			private static final long serialVersionUID = -4189781202604281005L;
 
+			/** Creates a default <code>Player1Panel</code>.*/
 			Player1Panel() {
 				setOpaque(false);
 				
@@ -356,9 +514,16 @@ public class GameSetupPanel extends JPanel {
 			}
 		}
 		
+		/**
+		 * Displays options available for Player Two.
+		 * 
+		 * @author Clint Mooney
+		 *
+		 */
 		private class Player2Panel extends JPanel {
 			private static final long serialVersionUID = 3990173560168580410L;
 
+			/** Creates a default <code>Player2Panel</code>.*/
 			Player2Panel() {
 				setOpaque(false);
 				
@@ -387,7 +552,17 @@ public class GameSetupPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Listens for the user to press a button to switch turns and thus change the internal panels to display the opposite
+	 * player's information.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class TurnListener implements ActionListener {
+		/**
+		 * Switches the turn if the player presses the button indicated or shuffles the pieces on the board if requested.
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand() == "end_turn") {

@@ -5,25 +5,52 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+/**
+ * Displays the board and its pieces, allowing for a player to move its own pieces and attack opposing pieces.
+ * 
+ * @author Clint Mooney
+ *
+ */
 public class GamePlayPanel extends JPanel {
 	private static final long serialVersionUID = -7309809738430689934L;
+	
+	/** Indicates whether a player is able to move a piece.*/
 	boolean canMove = true;
+	/** Indicates whether a player has already moved and attacked another piece this turn.*/
 	boolean hasAttacked = false;
+	/** Indicates that the model is in the process of changing turns.*/
 	boolean changingTurns = false;
+	/** Listens to button presses and performs operations based on the buttons' <code>actionCommand</code>.*/
 	ActionListener butListener;
 	
+	/** A reference to an instance of the Game class representing the model used for display.*/
 	Game gameModel;
+	/** A reference to the currently selected piece.*/
 	Piece pieceSelected;
+	/** A reference to a previously selected piece that belongs to the current player.*/
 	Piece attackingPiece;
-	
+
+	/** Stores the original x-location of the piece currently selected.*/
 	int sourceLocX = 0;
+	/** Stores the original y-location of the piece currently selected.*/
 	int sourceLocY = 0;
+	/** Stores the locations of squares on the board which a currently selected piece can move to.*/
 	int[][] possibleMoves;
-	
+
+	/** A <code>JPanel</code> used to display a <code>Player</code>'s information on the left side of the <code>GameView</code>,
+	 * corresponding to the player whose turn it is.*/
 	UserDisplayPanel userDisplayPanel;
+	/** A panel to display the <code>gameModel</code>'s board.*/
 	BoardPanel boardPanel;
+	/** Displays buttons for the user to interact with to change the game state or switch turns.*/
 	OptionPanel optionPanel;
-		
+	
+	/**
+	 * Creates a GamePlayPanel with a reference to the parent <code>ActionListener</code> and <code>Game</code>.
+	 * 
+	 * @param butListener {@link GamePlayPanel#butListener}
+	 * @param gameModel {@link GamePlayPanel#gameModel}
+	 */
 	GamePlayPanel(ActionListener butListener, Game gameModel){
 		this.butListener = butListener;
 		this.gameModel = gameModel;
@@ -39,6 +66,13 @@ public class GamePlayPanel extends JPanel {
 		
 	}
 	
+
+	/**
+	 * Displays and organizes the contents of the panel.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class MainPanel extends JPanel {
 		private static final long serialVersionUID = -5766267547077339193L;
 
@@ -71,15 +105,30 @@ public class GamePlayPanel extends JPanel {
 		}
 		
 	}
-		
+	
+	/**
+	 * A panel to display the <code>gameModel</code>'s board.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class BoardPanel extends JPanel {
 		private static final long serialVersionUID = -1075682170099848439L;
+		
+		/** Stores the width of the board, which is used to display the image for the game board using this as its width and height.*/
 		int boardWidth;
+		/** Refers to the width of the individual squares on the game board on the screen.*/
 		int gridWidth;
+		/** Refers to the width of piece icons when they are drawn on the board.*/
 		int pieceWidth;
+		/** Refers to how far inset the board should be displayed horizontally.*/
 		int boardHOffset;
+		/** Refers to how far inset the board should be displayed vertically.*/
 		int boardVOffset;
 		
+		/**
+		 * Creates a BoardPanel.
+		 */
 		BoardPanel(){
 			setOpaque(false);
 			
@@ -88,11 +137,22 @@ public class GamePlayPanel extends JPanel {
 			addMouseListener(new PieceMovementListener());
 		}
 		
+		/**
+		 * A MouseListener to interpret where the user is interacting with the board.
+		 * 
+		 * @author Clint Mooney
+		 *
+		 */
 		private class PieceMovementListener implements MouseListener {
-
+			/** 
+			 * Required override from <code>MouseListener</code> (Unused).
+			 */
 			@Override
 			public void mouseClicked(MouseEvent e) {}
 
+			/**
+			 * Interprets the player's click to attempt to select or move a piece to a clicked location.
+			 */
 			@Override
 			public void mousePressed(MouseEvent e) {
 				int clickX = e.getX();
@@ -165,18 +225,30 @@ public class GamePlayPanel extends JPanel {
 				userDisplayPanel.displayPiece(pieceSelected, false);
 				repaint();
 			}
-
+			
+			/** 
+			 * Required override from <code>MouseListener</code> (Unused).
+			 */
 			@Override
 			public void mouseReleased(MouseEvent e) {}
-
+			
+			/** 
+			 * Required override from <code>MouseListener</code> (Unused).
+			 */
 			@Override
 			public void mouseEntered(MouseEvent e) {}
-
+			
+			/** 
+			 * Required override from <code>MouseListener</code> (Unused).
+			 */
 			@Override
 			public void mouseExited(MouseEvent e) {}
 			
 		}
 		
+		/**
+		 * Draws the board and the pieces currently placed on the board.
+		 */
 		@Override
 		public void paintComponent(Graphics g) {
 			
@@ -244,9 +316,18 @@ public class GamePlayPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Displays buttons for the user to interact with to change the game state or switch turns.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class OptionPanel extends JPanel {
 		private static final long serialVersionUID = -1495946805893261147L;
 		
+		/**
+		 * Creates a default <code>OptionPanel</code>.
+		 */
 		OptionPanel(){
 			setOpaque(false);
 			
@@ -255,9 +336,18 @@ public class GamePlayPanel extends JPanel {
 			add(new ButtonPanel());
 		}
 		
+		/**
+		 * Displays options available to a player during gameplay.
+		 * 
+		 * @author Clint Mooney
+		 *
+		 */
 		private class ButtonPanel extends JPanel {
 			private static final long serialVersionUID = -6012854594396096008L;
-
+			
+			/**
+			 * Creates a default <code>ButtonPanel</code>.
+			 */
 			ButtonPanel() {
 				setOpaque(false);
 				
@@ -281,7 +371,17 @@ public class GamePlayPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Listens for the user to press a button to switch turns and thus change the internal panels to display the opposite
+	 * player's information.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class TurnListener implements ActionListener {
+		/**
+		 * Switches the turn if the player presses the button indicated or shuffles the pieces on the board if requested.
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand() == "end_turn") {

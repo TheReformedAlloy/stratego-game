@@ -6,23 +6,43 @@ import java.awt.image.*;
 
 import javax.swing.*;
 
+/**
+ * Displays two panels to select a color and name to be associated with each player.
+ * 
+ * @author Clint Mooney
+ *
+ */
 public class GameInitPanel extends GraphicPanel{
 	private static final long serialVersionUID = 1955627489428781035L;
 
+	/** Listens to button presses and performs operations based on the buttons' <code>actionCommand</code>.*/
 	ActionListener submitListener;
 	
+	/** A panel to choose a color for player one.*/
 	GamepieceColorChooser leftPanel;
 	
+	/** Stores player one's currently selected color.*/
 	Color player1Color;
+	/** Stores player one's name.*/
 	String player1Name;
+	/** Stores the image created for player one.*/
 	BufferedImage player1Image;
 	
+	/** A panel to choose a color for player two.*/
 	GamepieceColorChooser rightPanel;
-	
+
+	/** Stores player two's currently selected color.*/
 	Color player2Color;
+	/** Stores player one's name.*/
 	String player2Name;
+	/** Stores the image created for player one.*/
 	BufferedImage player2Image;
 	
+	/**
+	 * Creates a GameInitPanel with a reference to the parent <code>ActionListener</code>.
+	 * 
+	 * @param submitListener {@link GameInitPanel#submitListener}
+	 */
 	GameInitPanel(ActionListener submitListener) {
 		super(TextureManager.getInstance().getImage("background"));
 		
@@ -41,6 +61,12 @@ public class GameInitPanel extends GraphicPanel{
 		add(Box.createGlue(), BorderLayout.SOUTH);
 	}
 	
+	/**
+	 * Displays and organizes the two players' setup panels.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class MainPanel extends JPanel {
 		private static final long serialVersionUID = -9221511935291397389L;
 
@@ -73,6 +99,9 @@ public class GameInitPanel extends GraphicPanel{
 	private class MiddlePanel extends JPanel {
 		private static final long serialVersionUID = 1050328621738298057L;
 
+		/**
+		 * Creates a default <code>MiddlePanel</code>.
+		 */
 		MiddlePanel() {
 			GridLayout panelLayout = new GridLayout(1,2);
 			panelLayout.setHgap(20);
@@ -88,9 +117,19 @@ public class GameInitPanel extends GraphicPanel{
 		}
 	}
 	
+	/**
+	 * Displays a button to submit the user information.
+	 * 
+	 * @author there
+	 *
+	 */
+	
 	private class BottomPanel extends JPanel {
 		private static final long serialVersionUID = 6381609899320147379L;
 
+		/**
+		 * Creates a default <code>BottomPanel</code>.
+		 */
 		BottomPanel() {
 			setLayout(new BorderLayout());
 			

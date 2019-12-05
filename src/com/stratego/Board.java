@@ -1,12 +1,26 @@
 package com.stratego;
 
+/**
+ * A model to manage a two-dimensional array of <code>Pieces</code> during setup and play.
+ * 
+ * @author James Ford
+ * @author Clint Mooney
+ *
+ */
 public class Board {
 	
+	/**
+	 * A two-dimensional array to store the current pieces on the board in a 10x10 grid, representing the
+	 * typical Stratego board.
+	 */
 	private Piece[][] board;   //this array needs to be a 10x10
 	/*
 	 * private int w; //used for width of the display private int h; //used for
 	 * height of the display
 	 */	
+	/**
+	 * Creates a <code>Board</code> and defines <code>board</code> as a 10x10 grid.
+	 */
 	public Board()
 	{
 		board = new Piece[10][10];
@@ -15,19 +29,40 @@ public class Board {
 		 */
 	}
 
-	//used to the piece found at a given grid location
+	/**
+	 * Used to get the piece found at a given grid location. The order of x and y is flipped here. If we stick to the traditional
+	 * orientation of an x and y axis, this is needed to ensure that the board reads the correct space. 	
+	 * 
+	 * @param x specifies the Piece's location on the x-axis of <code>board</code>.
+	 * @param y specifies the Piece's location on the y-axis of <code>board</code>.
+	 * @return the Piece at location (x, y).
+	 */
 	public Piece getGridLocation(int x, int y)
 	{
 		return board[y][x];   //the order of x and y is flipped here. If we stick to the traditional orientation of an x and y axis, 
 							  //this is needed to ensure that the board reads the correct space. 	
 	}
 	
-	//used to change the contents of a location on the board
+	/**
+	 * Used to change the contents of a location on the board. The order of x and y is flipped here. If we stick to the traditional
+	 * orientation of an x and y axis, this is needed to ensure that the board reads the correct space. 	
+	 * 
+	 * @param x specifies the Piece's location on the x-axis of <code>board</code>.
+	 * @param y specifies the Piece's location on the y-axis of <code>board</code>.
+	 * @param p the Piece to be placed at location (x, y).
+	 */
 	public void setLocation(int x, int y, Piece p)
 	{
 		board[y][x] = p;
 	}
 	
+	/**
+	 * Counts the number of pieces a player has on the <code>board</code> based on their associated <code>turnOrder</code>,
+	 * which corresponds to the <code>owner</code> field of a <code>Piece</code>.
+	 * 
+	 * @param playerNo indicates which player the <code>Piece</code> must belong to in order to be counted.
+	 * @return the number of <code>Piece</code>s that belong to a given player.
+	 */
 	public int checkNumberOfPieces(int playerNo) {
 		int count = 0;
 		
@@ -42,7 +77,13 @@ public class Board {
 		return count;
 	}
 	
-	//returns an array of the possible locations a chosen piece can move to
+	/**
+	 * Returns an array of the possible locations a chosen piece can move to.
+	 * 
+	 * @param x specifies the location on the x-axis of <code>board</code> that the piece to be considered is stored in.
+	 * @param y specifies the location on the y-axis of <code>board</code> that the piece to be considered is stored in.
+	 * @return an array of the possible locations a chosen piece can move to. 
+	 */
 	public int[][] getPossibleMoves(int x, int y) 
 	{
 		int[][] moves;      					//stores the possible moves

@@ -9,15 +9,32 @@ import javax.swing.border.Border;
 import java.io.IOException;
 import java.util.HashMap;
 
+
+/**
+ * TextureManager is a singleton class which loads and stores the images, colors, and borders to be used in the
+ * game. There can only be one instance of the class in order to avoid repeated loading of images, which would be
+ * a memory-heavy process.
+ * 
+ * @author Clint Mooney
+ *
+ */
+
 public class TextureManager {
+	/** Contains each image to be used, associated with a key <code>String</code>.*/
 	private HashMap<String, BufferedImage> images = new HashMap<String, BufferedImage>();
+	/** Contains each <code>Color</code> to be used, associated with a key <code>String</code>.*/
 	private HashMap<String, Color> colors = new HashMap<String, Color>();
+	/** Contains each <code>Border</code> to be used, associated with a key <code>String</code>.*/
 	private HashMap<String, Border> borders = new HashMap<String, Border>();
 	
-	//instance will be used to create an TextureManager.
+	/** Stores the current instance of the <code>TextureManager</code> class*/
 	private static TextureManager instance = null;
 	
-	//getInstance() can be accessed outside of this class to get the current instance of the game.
+	/** Ensures that the <code>TextureManager</code> has only one instance by initializing only if <code>instance</code>
+	 * currently is <code>null</code>.
+	 * 
+	 * @return <code>instance</code>.
+	 */
 	public static TextureManager getInstance() {
 		if(instance == null) {
 			instance = new TextureManager();
@@ -26,6 +43,10 @@ public class TextureManager {
 		return instance;
 	}
 	
+	/**
+	 * Creates a <code>TextureManager</code> and puts each image, <code>Color</code>, and <code>Border</code> into
+	 * the respective <code>HashMap</code>.
+	 */
 	private TextureManager() {
 		images.put("gray piece", processImage("assets/tiles/grayPiece.png"));
 		images.put("button", processImage("assets/gui/Button.png"));
@@ -47,7 +68,6 @@ public class TextureManager {
 		colors.put("border low", new Color(93, 54, 29));
 		colors.put("border vhigh", new Color(157, 118, 93));
 		
-		//borders.put
 		Border textBevel = BorderFactory.createBevelBorder(BevelBorder.RAISED, getColor("border vhigh"), getColor("border high"));
 		Border textBorder = BorderFactory.createLineBorder(getColor("border high"), 10);
 		Border textBevelBorder = BorderFactory.createCompoundBorder(textBevel, textBorder);
@@ -63,18 +83,42 @@ public class TextureManager {
 		borders.put("boarddb", boardDubBevelBorder);
 	}
 	
+	/**
+	 * Gets the image associated with the <code>key</code> provided.
+	 * 
+	 * @param key the <code>String</code> that is associated with a <code>BufferedImage</code> in <code>images</code>.
+	 * @return the <code>BufferedImage</code> associated with <code>key</code>
+	 */
 	public BufferedImage getImage(String key) {
 		return images.get(key);
 	}
 	
+	/**
+	 * Gets the <code>Color</code> associated with the <code>key</code> provided.
+	 * 
+	 * @param key the <code>String</code> that is associated with a <code>Color</code> in <code>colors</code>.
+	 * @return the <code>Color</code> associated with <code>key</code>
+	 */
 	public Color getColor(String key) {
 		return colors.get(key);
 	}
 	
+	/**
+	 * Gets the <code>Border</code> associated with the <code>key</code> provided.
+	 * 
+	 * @param key the <code>String</code> that is associated with a <code>Border</code> in <code>borders</code>.
+	 * @return the <code>Border</code> associated with <code>key</code>
+	 */
 	public Border getBorder(String key) {
 		return borders.get(key);
 	}
 	
+	/**
+	 * Loads an image into a <code>BufferedImage</code> object.
+	 * 
+	 * @param path denotes the location of the image specified.
+	 * @return the object representing the image at <code>path</code>.
+	 */
 	private static BufferedImage processImage(String path) {
 		try {
 			return ImageIO.read(TextureManager.class.getResource(path));
@@ -84,6 +128,11 @@ public class TextureManager {
 		}
 	}
 	
+	/**
+	 * Returns a new instance of the Gray Piece image for use in color modification.
+	 * 
+	 * @return a <code>BufferedImage</code> code representing <code>'assets/tiles/grayPiece.png'</code>.
+	 */
 	public static BufferedImage returnGrayPiece() {
 		try {
 			return ImageIO.read(TextureManager.class.getResource("assets/tiles/grayPiece.png"));

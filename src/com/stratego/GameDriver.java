@@ -4,29 +4,54 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-//Singleton used to create one instance of the game and have available to the rest of the program the stateChanging ActionListener:
+/**
+ * A singleton that contains the shared information used between the different JFrames
+ * that make up the user interface and provides a way to handle state changes throughout
+ * the game.
+ * 
+ * @author Clint Mooney
+ *
+ */
 public class GameDriver {
 	
-	//Enumerator lists the possible states the game can be in:
+	/**
+	 * Provides a list of the possible states the game can be in.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	public enum GameState {
 		MAINMENU, OPTIONMENU, GAMEDISPLAY
 	}
 	
-	private static boolean isFullScreen = false;				//Stores a boolean which is true if the game should be fullscreen.
-	private boolean sound = true;								//Stores a boolean which is true if the game able to play sound.
-	private GameState viewState = GameState.MAINMENU;			//Stores a GameState value which is called whenever changeViewState is called.
-	private static ActionListener stateChangeListener;			//Stores an actionlistener to be referenced throughout the rest of the program.
-	private static JFrame view;//Stores an instance of the current game window.
+	/** Denotes whether the game should be displayed in fullscreen.*/
+	private static boolean isFullScreen = false;
+	/** Indicates whether the game is able to play sound (Unused).*/
+	private boolean sound = true;
+	/** Records the current <code>GameState</code> that the game is in.*/
+	private GameState viewState = GameState.MAINMENU;
+	/** Provides a universal implementation of the <code>StateChangeListener</code> class.*/
+	private static ActionListener stateChangeListener;
+	/** Stores the current JFrame that is being displayed.*/
+	private static JFrame view;
 	
-	//Constructor creates a JFrame to store in view, rendering at 1280x720. Cannot be created outside of the class.
+	/**
+	 * Creates an instance of the GameDriver class; utilizes the <code>private</code> keyword
+	 * to ensure that it can be initialized outside of the use of the <code>getInstance</code>
+	 * method.
+	 */
 	private GameDriver(){
 		stateChangeListener = new StateChangeListener();
 	}
 	
-	//instance will be used to create an instance for the game.
+	/** Stores the current instance of the <code>GameDriver</code> class*/
 	private static GameDriver instance = null;
 	
-	//getInstance() can be accessed outside of this class to get the current instance of the game.
+	/** Ensures that the GameDriver has only one instance by initializing only if <code>instance</code>
+	 * currently is <code>null</code>.
+	 * 
+	 * @return <code>instance</code>.
+	 */
 	public static GameDriver getInstance() {
 		if(instance == null) {
 			instance = new GameDriver();
@@ -35,15 +60,26 @@ public class GameDriver {
 		return instance;
 	}
 	
+	/** 
+	 * Assigns <code>view</code> to a new <code>MainMenuView</code> to open the GUI.
+	 */
 	public static void openView() {
 		view = new MainMenuView(isFullScreen);
 	}
 	
+	/** 
+	 * Returns whether the <code>view</code> is being displayed in fullscreen.
+	 * 
+	 * @return <code>isFullScreen</code>.
+	 */ 
 	public boolean isFullScreen() {
-		return isFullScreen();
+		return isFullScreen;
 	}
 	
-	//Toggles whether the GUI displayed currently is in fullscreen mode and displays the GUI with the new:
+	/**
+	 * Toggles whether the GUI displayed currently is in fullscreen mode and displays the
+	 * GUI with the new <code>JFrame</code>.
+	 */
 	public void toggleFullScreen() {
 		isFullScreen = !isFullScreen;
 
@@ -62,16 +98,28 @@ public class GameDriver {
 		}
 	}
 	
+	/**
+	 * Returns the boolean which indicates whether the game should play sound.
+	 * 
+	 * @return <code>sound</code> (Unused).
+	 */
 	public boolean isSoundOn() {
 		return sound;
 	}
 	
-	//Toggles the sound boolean:
+	/**
+	 * Toggles <code>sound</code> to the opposite of its current state.
+	 */
 	public void toggleSound() {
 		sound = !sound;
 	}
 	
-	//Changes the state of the game based on the specified newState:
+	/**
+	 * Changes the state of the game based on the specified <code>newState</code> and updates
+	 * the GUI accordingly.
+	 * 
+	 * @param newState the destination GameState which the game should transition to.
+	 */
 	private void changeViewState(GameState newState) {
 		view.setVisible(false);
 		view.dispose();
@@ -92,12 +140,23 @@ public class GameDriver {
 	}
 	
 	
-	//Allows for the program to access the instance's stateChangeListener:
+	/**
+	 * Allows for the program to access the instance's stateChangeListener.
+	 * 
+	 * @return <code>stateChangeListener</code>
+	 */
 	public ActionListener getStateChangeListener() {
 		return stateChangeListener;
 	}
 	
-	//Defines the ActionListener to be passed through the singleton:
+	/**
+	 * Defines the ActionListener to be passed through the singleton that will listen for
+	 * interactions with the GUI that demand a change in either the state of the game or
+	 * the display.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class StateChangeListener implements ActionListener {
 		@Override
 		public void actionPerformed (ActionEvent e) {

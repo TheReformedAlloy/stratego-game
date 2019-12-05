@@ -4,20 +4,42 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * GameView is the JFrame that displays when the player selects 'Start New Game' from the main menu and allows the
+ * players to begin setup of the game and play Stratego.
+ * 
+ * @author Clint Mooney
+ *
+ */
+
 public class GameView extends JFrame {
 	private static final long serialVersionUID = 7297598809856376824L;
+	
+	/** Stores whether the game should be displayed in fullscreen.*/
 	boolean isFullScreen;
+	/** Stores a reference to an instance of the game's StandardKeyListener (Unused).*/
 	KeyListener keyboard;
-	
+
+	/** A JPanel with CardLayout to switch between different child panels that represent stages of the game.*/
 	JPanel innerPanel;
+	/** The LayoutManager which will be implemented by innerPanel.*/
 	CardLayout cards;
-	
+
+	/** A JPanel representing the player customization screen.*/
 	GameInitPanel initPanel;
+	/** A JPanel representing the board setup screen.*/
 	GameSetupPanel setupPanel;
+	/** A JPanel representing the game during play.*/
 	GamePlayPanel gamePanel;
-	
+
+	/** An instance of the Game class representing the model used for display.*/
 	Game gameModel;
 	
+	/**
+	 * Creates a GameView.
+	 * 
+	 * @param isFullScreen Stores whether the game should be displayed in fullscreen.
+	 */
 	public GameView(boolean isFullScreen) {
 		//Set up Initial Game View:
 		setTitle("Game | Stratego");
@@ -48,8 +70,16 @@ public class GameView extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	/**
+	 * Listens for input from the player indicating that they are finished customizing their color/name or setting up the board.
+	 * 
+	 * @author Clint Mooney
+	 *
+	 */
 	private class PlayerSetupListener implements ActionListener {
-
+		/**
+		 * Determines what to do in the case a button is pressed.
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("start_setup")) {
