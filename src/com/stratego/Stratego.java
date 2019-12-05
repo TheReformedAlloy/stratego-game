@@ -7,7 +7,7 @@ package com.stratego;
  * @author Clint Mooney
  * @author James Ford
  * @author Rebecca Whisnant
- * @author Jeremiah Allsford
+ * @author Jeremiah Allsbrook
  *
  */
 public class Stratego {

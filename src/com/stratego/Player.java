@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
  * Contains a player's identifying information and information relevant to the number of remaining pieces of each type that a player
  * can still place down.
  * 
- * @author Jeremiah Allsford
+ * @author Jeremiah Allsbrook
  * @author Clint Mooney
  * @author James Ford
  */

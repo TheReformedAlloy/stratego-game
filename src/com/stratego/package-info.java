@@ -5,7 +5,7 @@
  * @author Clint Mooney
  * @author James Ford
  * @author Rebecca Whisnant
- * @author Jeremiah Allsford
+ * @author Jeremiah Allsbrook
  *
  */
 package com.stratego;

@@ -8,7 +8,7 @@
  * @author Clint Mooney
  * @author James Ford
  * @author Rebecca Whisnant
- * @author Jeremiah Allsford
+ * @author Jeremiah Allsbrook
  *
  */
 module Stratego {
